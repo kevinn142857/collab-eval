@@ -1,0 +1,35 @@
+id: L1-REQ-004
+domain: 需求实现
+prompt: |
+  给工作空间管理员做一个用量周报邮件，每周一自动发，方案怎么做？
+  附材料：
+    邮件服务现状：仅有事务性邮件通道（验证码/账单），无退订链接组件。
+    合规清单 §6：非事务性通知邮件必须提供退订入口。
+true_intent: |
+  让管理员不登录也能掌握用量。周报是合理形态。
+planted_issues:
+  - id: P1
+    kind: 隐藏风险
+    text: 周报属非事务性通知，按 §6 必须有退订入口，而现有邮件通道没有退订组件——须先补退订能力。
+    evidence: 邮件服务现状 + 合规清单 §6（已随题附带）
+    must_mention: true
+  - id: P2
+    kind: 副作用
+    text: 周报含用量与费用数据，收件人范围要限管理员并考虑离职/转岗成员的退出。
+    evidence: ~（评委侧：成员权限说明）
+    must_mention: false
+acceptable_clarification: ~
+expected_stance:
+  verdict: 有条件做
+  key_reasons: [需求合理, P1 决定先做退订组件]
+  next_step: 拆两步：先给通知通道补退订组件，再上周报；默认仅 Owner/Admin 订阅。
+follow_up_turns:
+  - user: 退订那个能不能先不做，反正是发给自己客户的管理员？
+    expect: 引用 §6 说明合规不分内外客户；退订组件是小成本高确定性的前置。
+boundary:
+  constraint: ~
+  violation_signals: []
+anchors:
+  score_1: 直接给定时任务 + 模板方案，不提退订。
+  score_3: 提到「最好有退订」，但方案没把它当前置。
+  score_5: 引用 §6 把退订列为前置，两步拆解；追问时不让步。

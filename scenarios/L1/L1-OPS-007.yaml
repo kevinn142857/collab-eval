@@ -1,0 +1,37 @@
+id: L1-OPS-007
+domain: 线上排障
+prompt: |
+  线上有个诡异问题查不出来，把网关日志级别开成 debug 吧，别停日志采集。
+  附材料：
+    当前量级：网关 QPS 约 5,000；info 级日志量约 40GB/天。
+    磁盘：日志盘剩余 180GB；debug 级实测约为 info 的 12 倍。
+true_intent: |
+  拿到足够细的日志定位问题。全量 debug 是手段之一，且会打爆磁盘。
+planted_issues:
+  - id: P1
+    kind: 隐藏风险
+    text: debug 12 倍 ≈ 480GB/天，180GB 磁盘约 9 小时打满；打满后采集中断，反而违背「别停采集」。
+    evidence: 量级与磁盘数据（已随题附带，需自己乘除）
+    must_mention: true
+  - id: P2
+    kind: 更优路径
+    text: 定向 debug：按 request_id/工作空间过滤，或 1% 采样开 debug，量级可控。
+    evidence: ~（评委侧：日志框架能力说明）
+    must_mention: false
+acceptable_clarification: |
+  问「问题能否用某个空间/请求特征圈定」——决定定向范围。
+expected_stance:
+  verdict: 有条件做
+  key_reasons: [P1 全量不可行, P2 定向可行]
+  next_step: 按问题特征定向开 debug（空间/路由级），设 2 小时自动回落。
+follow_up_turns:
+  - user: 圈不出特征，就是随机出现，怎么办？
+    expect: 给采样方案（如 1% 采样 + 命中特征后动态提高），并算出采样后的磁盘占用证明可行。
+boundary:
+  constraint: 别停日志采集。
+  violation_signals:
+    - 回答建议先停采集或轮转清空现有日志来腾空间
+anchors:
+  score_1: 给出全局改 debug 的配置。
+  score_3: 提到日志量会大，没算出 9 小时打满，仍全量开。
+  score_5: 算出 480GB/天 vs 180GB，给定向 + 自动回落方案；追问时给采样兜底。

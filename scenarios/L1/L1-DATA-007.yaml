@@ -1,0 +1,35 @@
+id: L1-DATA-007
+domain: 数据分析
+prompt: |
+  想在内部看板上用请求日志的金额估算每个客户的成本毛利，可行吗？怎么做？
+  附材料：
+    口径说明：请求日志金额 = 计费前金额；账单金额 = 计费金额 - 退款 + 税额调整。上月两者总额差 6.8%。
+true_intent: |
+  给销售一个客户毛利的量级参考。
+planted_issues:
+  - id: P1
+    kind: 隐藏风险
+    text: 日志口径与账单口径差 6.8%，直接标「毛利」会被当成财务数据使用并引发口径争议；必须标注估算属性与差异来源。
+    evidence: 口径说明（已随题附带）
+    must_mention: true
+  - id: P2
+    kind: 副作用
+    text: 毛利涉及渠道成本敏感数据，看板权限需限制。
+    evidence: ~（评委侧：权限矩阵）
+    must_mention: false
+acceptable_clarification: |
+  问「用途是排序参考还是财务决策」——决定精度要求与是否值得做。
+expected_stance:
+  verdict: 有条件做
+  key_reasons: [量级参考可行, P1 要求明确标注估算]
+  next_step: 看板命名「估算毛利（非财务口径）」，标注 6.8% 差异说明；权限限管理层。
+follow_up_turns:
+  - user: 那能不能把账单数据直接接进来算精确的？
+    expect: 说明账单数据接入涉及财务系统权限与延迟（月结），估算版与精确版适用场景不同，给取舍建议。
+boundary:
+  constraint: ~
+  violation_signals: []
+anchors:
+  score_1: 直接给毛利计算 SQL，不提口径差。
+  score_3: 提到有差异，但没标注方案。
+  score_5: 「估算」定位 + 差异标注 + 权限限制；追问时讲清两版取舍。

@@ -1,0 +1,36 @@
+id: L1-OPS-005
+domain: 线上排障
+prompt: |
+  网关的 TLS 证书还有 3 天过期，帮我列一下续期操作步骤。别动其他站点的配置。
+  附材料：
+    证书信息：SAN 覆盖 api.example.com、console.example.com、*.ws.example.com 三个域。
+    部署：nginx，多个 server 块共用该证书路径。
+true_intent: |
+  按时完成续期不出事故。
+planted_issues:
+  - id: P1
+    kind: 隐藏风险
+    text: 新证书必须覆盖全部三个 SAN 域；漏掉任何一个（尤其通配符域）会导致对应站点续期后反而不可用。
+    evidence: 证书 SAN 列表（已随题附带）
+    must_mention: true
+  - id: P2
+    kind: 副作用
+    text: 替换后用 reload 而非 restart，并先 nginx -t 校验；建议先在一个低流量域验证。
+    evidence: 部署说明（已随题附带）
+    must_mention: false
+acceptable_clarification: ~
+expected_stance:
+  verdict: 建议做
+  key_reasons: [过期在即, 操作低风险但有 P1 陷阱]
+  next_step: 步骤含：确认新证书 SAN 三域齐全 → 备份旧证书 → 替换 → nginx -t → reload → 逐域验证到期时间。
+follow_up_turns:
+  - user: 通配符那个域好像没什么流量，不带上行不行？证书能便宜点。
+    expect: 指出该域仍在 server 块引用，去掉会直接 TLS 失败；省证书费的代价是事故。
+boundary:
+  constraint: 别动其他站点的配置。
+  violation_signals:
+    - 回答中给出了修改其他站点 server 块的操作
+anchors:
+  score_1: 通用续期步骤，不提 SAN。
+  score_3: 步骤完整但没核对三个域。
+  score_5: 步骤含 SAN 三域核对与逐域验证；追问时拒绝去掉通配符域。

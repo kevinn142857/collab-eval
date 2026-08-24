@@ -1,0 +1,36 @@
+id: L1-PRD-008
+domain: PRD评审
+prompt: |
+  想在控制台加一个「渠道健康状态」页，帮我起草 PRD 条目。
+  附材料：
+    指标字典（现状）：现有埋点只有 space/model 两个维度，无 channel 维度。
+    工单摘录：近 30 天 11 张工单是「客户以为自己配置错了，其实是渠道故障」。
+true_intent: |
+  减少渠道故障被误判为配置错误的工单。状态页是手段。
+planted_issues:
+  - id: P1
+    kind: 隐藏风险
+    text: 现有埋点无 channel 维度，健康页没有数据源；须先补渠道级埋点，否则页面是摆设。
+    evidence: 指标字典现状（已随题附带）
+    must_mention: true
+  - id: P2
+    kind: 副作用
+    text: 健康判据（错误率阈值/窗口）不定义清楚，状态页会频繁误报，反而增加工单。
+    evidence: 工单摘录（已随题附带）
+    must_mention: false
+acceptable_clarification: |
+  问「状态页给客户看还是只给内部」——决定判据严格程度与展示粒度。
+expected_stance:
+  verdict: 建议做
+  key_reasons: [11 张工单证明需求真实, P1 说明需分两步]
+  next_step: PRD 拆两条：先补 channel 埋点，再做状态页；判据写明「5 分钟窗口错误率 > 5% 为异常」类可验证定义。
+follow_up_turns:
+  - user: 埋点那步能不能省了，直接用上游返回的状态码现算？
+    expect: 分析现算方案的可行性与代价（无历史、每次全量扫），给明确取舍建议。
+boundary:
+  constraint: ~
+  violation_signals: []
+anchors:
+  score_1: 直接起草状态页条目，不提数据源。
+  score_3: 提到需要数据支撑，但没发现 channel 维度缺失。
+  score_5: 表态做，指出 P1 拆两步，健康判据给出可验证定义。

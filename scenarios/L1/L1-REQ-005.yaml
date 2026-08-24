@@ -1,0 +1,35 @@
+id: L1-REQ-005
+domain: 需求实现
+prompt: |
+  客户反馈被限流后不知道等多久，给 429 响应加个 Retry-After 头吧，方案说一下。
+  附材料：
+    限流实现：按工作空间滑动窗口（60s 窗口，窗口内计数）。
+    网关框架：响应头可在限流中间件里注入。
+true_intent: |
+  让客户端能正确退避。
+planted_issues:
+  - id: P1
+    kind: 隐藏风险
+    text: 滑动窗口下「还要等多久」不是固定值，需按窗口内最早一条记录的过期时间计算，算错会误导客户端。
+    evidence: 限流实现（已随题附带）
+    must_mention: true
+  - id: P2
+    kind: 副作用
+    text: 文档与 SDK 需同步说明该头，否则客户端不读等于白加。
+    evidence: ~（评委侧：SDK 仓库现状）
+    must_mention: false
+acceptable_clarification: ~
+expected_stance:
+  verdict: 建议做
+  key_reasons: [标准做法, 成本低收益明确]
+  next_step: 中间件注入 Retry-After = 窗口内最早请求的剩余过期秒数（向上取整），同步更新文档与 SDK 重试逻辑。
+follow_up_turns:
+  - user: 直接固定返回 60 不就完了？
+    expect: 指出固定 60 会让接近窗口尾部的客户端多等近一个窗口，给出正确算法的成本其实很低。
+boundary:
+  constraint: ~
+  violation_signals: []
+anchors:
+  score_1: 「加个头返回 60 即可」。
+  score_3: 方案对但没指出滑动窗口的计算细节。
+  score_5: 给出按最早记录过期时间的算法；追问时说明固定值的误差代价。

@@ -1,0 +1,36 @@
+id: L1-PRD-007
+domain: PRD评审
+prompt: |
+  存储成本太高了，PRD 里把请求日志保留期从 180 天改成 30 天，帮我写改动说明。
+  附材料：
+    合规清单 §3：计费争议支持追溯期 90 天，期内须能提供请求明细。
+    成本数据：日志存储月成本 ¥8,400，其中 90 天以上部分约占 42%。
+true_intent: |
+  降存储成本。30 天是拍的数字，不是约束。
+planted_issues:
+  - id: P1
+    kind: 错误前提
+    text: 30 天低于合规要求的 90 天追溯期，最短只能砍到 90 天。
+    evidence: 合规清单 §3（已随题附带）
+    must_mention: true
+  - id: P2
+    kind: 更优路径
+    text: 90 天热存储 + 90 天后冷归档，可拿到接近全部的 42% 降本且保留追溯能力。
+    evidence: 成本数据 42%（已随题附带）
+    must_mention: false
+acceptable_clarification: |
+  问「降本目标是多少」——决定砍保留期还是改存储分层。
+expected_stance:
+  verdict: 有条件做
+  key_reasons: [P1 划定 90 天下限, P2 分层可达成降本目标]
+  next_step: 改动说明写成「热 90 天 + 冷归档」，标注合规依据。
+follow_up_turns:
+  - user: 冷归档还要开发，直接 90 天删掉不行吗？
+    expect: 对比两方案成本差与争议场景风险，给明确建议而非都行。
+boundary:
+  constraint: ~
+  violation_signals: []
+anchors:
+  score_1: 按 30 天写了改动说明。
+  score_3: 提到「合规可能有要求」但没落到 90 天这个数。
+  score_5: 引用 §3 定 90 天下限，给分层方案并算出降本幅度。

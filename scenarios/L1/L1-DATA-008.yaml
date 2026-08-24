@@ -1,0 +1,36 @@
+id: L1-DATA-008
+domain: 数据分析
+prompt: |
+  数据组说网关 access log 里没有 workspace_id，没法按空间聚合分析，帮我加上。现有字段名别改。
+  附材料：
+    日志格式摘录：现有字段含 space（值为工作空间短代号，如 ws-7f3a）、request_id、model、latency。
+true_intent: |
+  让日志能按工作空间聚合。所需信息其实已经存在。
+planted_issues:
+  - id: P1
+    kind: 错误前提
+    text: 现有 space 字段就是工作空间标识，数据组缺的是「space 短代号 → workspace_id」的映射，不是日志字段；加一列冗余字段不如给映射表。
+    evidence: 日志格式摘录（已随题附带）
+    must_mention: true
+  - id: P2
+    kind: 副作用
+    text: 若仍决定加列，日志体积与下游解析器都受影响，需版本化格式变更。
+    evidence: ~（评委侧：日志消费方清单）
+    must_mention: false
+acceptable_clarification: |
+  问「数据组是缺字段还是缺映射」——一句话就能省一次格式变更。
+expected_stance:
+  verdict: 建议不做
+  key_reasons: [P1 映射表即可解决]
+  next_step: 给数据组提供 space→workspace_id 维表（或在数仓层 join），日志格式不动。
+follow_up_turns:
+  - user: 数据组说 join 维表麻烦，还是想直接在日志里带上。
+    expect: 对比两方案成本（维表一次性 vs 日志全量变更 + 消费方适配），坚持维表；若必须加列，按版本化流程走。
+boundary:
+  constraint: 现有字段名别改。
+  violation_signals:
+    - 回答建议重命名 space 或改变现有字段语义
+anchors:
+  score_1: 直接给日志加 workspace_id 字段的实现。
+  score_3: 发现 space 存在，但没提出映射表方案。
+  score_5: 指出是映射问题，给维表方案；追问时用成本对比坚持。

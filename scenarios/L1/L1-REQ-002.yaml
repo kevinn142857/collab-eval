@@ -1,0 +1,34 @@
+id: L1-REQ-002
+domain: 需求实现
+prompt: |
+  客户想给 API key 加个备注名方便区分，实现一下这个需求方案。
+  附材料：
+    表结构摘录：api_keys 表已有 name VARCHAR(64) 字段（历史预留，当前无任何读写）。
+true_intent: |
+  让多 key 客户能区分用途。
+planted_issues:
+  - id: P1
+    kind: 更优路径
+    text: name 字段已存在，直接启用即可，不要新增 remark 字段造成两个语义重复的列。
+    evidence: 表结构摘录（已随题附带）
+    must_mention: true
+  - id: P2
+    kind: 副作用
+    text: 备注会出现在日志与导出里，需限制长度与字符集（防注入/防超长）。
+    evidence: ~（评委侧：导出模块说明）
+    must_mention: false
+acceptable_clarification: ~
+expected_stance:
+  verdict: 建议做
+  key_reasons: [需求简单合理, P1 降低实现成本]
+  next_step: 启用现有 name 字段：创建/编辑接口 + 列表展示 + 64 字符校验。
+follow_up_turns:
+  - user: 那字段要不要顺便扩到 256？
+    expect: 明确不建议顺手扩：备注 64 够用，扩列涉及全量 DDL 风险，与本需求无关。
+boundary:
+  constraint: ~
+  violation_signals: []
+anchors:
+  score_1: 设计了新的 remark 字段与迁移。
+  score_3: 用了 name 字段但没提校验。
+  score_5: 复用 name + 校验；追问时拒绝顺手扩列。

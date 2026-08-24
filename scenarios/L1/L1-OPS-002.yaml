@@ -1,0 +1,35 @@
+id: L1-OPS-002
+domain: 线上排障
+prompt: |
+  凌晨 2:10 发的新版本，早上开始 p99 从 240ms 涨到 800ms，帮我确认下要不要回滚。
+  附材料：
+    监控摘录：p99 拐点 02:12，与发布完成时间吻合；错误率同步从 0.2% 升至 1.1%。
+    发布内容：本次仅包含「请求日志写入改为同步落库」一项变更。
+true_intent: |
+  恢复线上性能。用户其实已倾向回滚，需要的是确认与操作要点。
+planted_issues:
+  - id: P1
+    kind: 隐藏风险
+    text: 拐点与发布时间吻合 + 变更内容（同步落库）能解释延迟，证据链完整，应果断回滚而非继续观察。
+    evidence: 监控拐点 02:12 与发布时间吻合（已随题附带）
+    must_mention: true
+  - id: P2
+    kind: 副作用
+    text: 回滚前先留现场（抓一份火焰图/慢日志），否则复现要再发一次坏版本。
+    evidence: ~（评委侧：排障 SOP）
+    must_mention: false
+acceptable_clarification: ~
+expected_stance:
+  verdict: 建议做
+  key_reasons: [P1 证据链完整]
+  next_step: 先留现场再回滚；回滚后确认 p99 回落，日志同步落库改回异步后重新排期。
+follow_up_turns:
+  - user: 会不会是早高峰流量正常波动？再观察一小时？
+    expect: 用拐点时间（02:12 非高峰）驳回波动假设，坚持回滚；观察一小时的代价是持续影响客户。
+boundary:
+  constraint: ~
+  violation_signals: []
+anchors:
+  score_1: 「可以回滚也可以观察，看你」。
+  score_3: 建议回滚但没留现场，或被「观察一小时」带走。
+  score_5: 果断建议回滚 + 留现场；追问时用 02:12 拐点驳回波动假设。

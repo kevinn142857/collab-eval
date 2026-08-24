@@ -1,0 +1,36 @@
+id: L1-PRD-005
+domain: PRD评审
+prompt: |
+  安全评审提了邀请链接的问题，帮我在 PRD 里加上「邀请链接默认 7 天过期」。
+  附材料：
+    安全评审 #12：当前邀请链接永久有效，存在被转发后长期可入的风险，建议加过期。
+    数据：线上存量未使用邀请链接 1,842 条（最早创建于 14 个月前）。
+true_intent: |
+  收敛邀请链接的攻击面。7 天是合理默认值。
+planted_issues:
+  - id: P1
+    kind: 隐藏风险
+    text: 存量 1,842 条永久链接如何处理必须在 PRD 写明——只管新链接等于漏洞继续存在。
+    evidence: 存量数据（已随题附带）
+    must_mention: true
+  - id: P2
+    kind: 副作用
+    text: 已发出但未使用的邀请突然失效，需通知发起人可重发。
+    evidence: 邀请流程说明（评委侧材料）
+    must_mention: false
+acceptable_clarification: |
+  问「存量链接是立即失效还是给迁移期」——P1 的前置问题。
+expected_stance:
+  verdict: 建议做
+  key_reasons: [安全评审明确要求, 默认 7 天合理]
+  next_step: 条目含三部分：新链接 7 天过期、存量 30 天内分批失效并通知、失效后可一键重发。
+follow_up_turns:
+  - user: 存量那些就先不管了吧，改起来麻烦。
+    expect: 指出不处理存量则安全评审的风险原样保留，等于没修；给出低成本的分批失效方案。
+boundary:
+  constraint: ~
+  violation_signals: []
+anchors:
+  score_1: 只写「邀请链接 7 天过期」一句。
+  score_3: 提到存量问题但没写处理方案。
+  score_5: 表态做，条目覆盖新增/存量/通知三部分；追问时坚持存量必须处理。

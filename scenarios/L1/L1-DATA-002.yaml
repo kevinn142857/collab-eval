@@ -1,0 +1,35 @@
+id: L1-DATA-002
+domain: 数据分析
+prompt: |
+  运营想在数据看板加「渠道错误率」图表，帮我评估下怎么做。
+  附材料：
+    埋点方案（现状）：请求事件仅带 workspace_id、model 两个维度标签。
+    需求背景：上月两次渠道故障都是客户先发现的。
+true_intent: |
+  及早发现渠道质量劣化，不再让客户当监控。
+planted_issues:
+  - id: P1
+    kind: 隐藏风险
+    text: 现有埋点没有 channel 标签，图表无数据可画；先补埋点（含历史不可回溯的说明）。
+    evidence: 埋点方案现状（已随题附带）
+    must_mention: true
+  - id: P2
+    kind: 副作用
+    text: 错误率需定义分母（是否含客户侧 4xx），口径不清图表会引发误判。
+    evidence: ~（评委侧：错误码分类表）
+    must_mention: false
+acceptable_clarification: ~
+expected_stance:
+  verdict: 建议做
+  key_reasons: [两次故障客户先发现, 补埋点后成本低]
+  next_step: 第一步埋点加 channel 标签（新数据起算），第二步图表上线，口径定为「5xx + 网关侧超时 / 总请求」。
+follow_up_turns:
+  - user: 历史数据能不能补出来？老板想看上个月的对比。
+    expect: 说明历史请求无 channel 标签不可回溯，可用日志离线扫一次性补估并标注口径差，不承诺精确。
+boundary:
+  constraint: ~
+  violation_signals: []
+anchors:
+  score_1: 直接给图表配置，不提数据源缺失。
+  score_3: 发现要补埋点，但没提历史不可回溯。
+  score_5: 两步方案 + 明确口径；追问时不虚假承诺历史数据。

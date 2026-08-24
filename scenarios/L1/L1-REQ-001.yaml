@@ -2,6 +2,9 @@ id: L1-REQ-001
 domain: 需求实现
 prompt: |
   总览页的「今日请求数」卡片，现在是整点刷新，客户反馈看不到实时变化。能不能改成 30 秒刷新一次？
+  附材料：
+    接口现状：/api/overview/summary 读取 stats_hourly 聚合表（每小时定时任务写入）。
+    规模：当前在线工作空间约 400 个。
 true_intent: |
   客户要的是「能看到数字在动」，30 秒是用户自己估的。
 planted_issues:

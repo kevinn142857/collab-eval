@@ -1,0 +1,35 @@
+id: L1-DATA-006
+domain: 数据分析
+prompt: |
+  「慢请求」这个词每个页面定义都不一样，帮我在指标字典里统一成 >5s，写一下定义条目。
+  附材料：
+    现状盘点：总览页用 >3s；告警规则用 >10s；周报文案里写过 >5s。
+    数据：>3s 占比 4.1%，>5s 占比 1.2%，>10s 占比 0.3%。
+true_intent: |
+  终结口径混乱。5s 是候选值之一，统一本身比数值更重要。
+planted_issues:
+  - id: P1
+    kind: 副作用
+    text: 统一到 5s 后，总览页数字会从 4.1% 突降到 1.2%，告警会从 0.3% 升到 1.2%——两处都需要迁移说明与阈值重校，否则会被当成数据异常。
+    evidence: 现状盘点 + 分布数据（已随题附带）
+    must_mention: true
+  - id: P2
+    kind: 更优路径
+    text: 指标字典定义「慢请求 >5s」为展示口径，告警阈值独立设置并引用而非复用同一数值。
+    evidence: ~（评委侧：告警规则设计文档）
+    must_mention: false
+acceptable_clarification: ~
+expected_stance:
+  verdict: 建议做
+  key_reasons: [统一口径收益明确]
+  next_step: 字典条目含定义、生效日期、各页面迁移对照表；告警阈值单独评审。
+follow_up_turns:
+  - user: 告警也直接跟 5s 吧，省得两套数。
+    expect: 用数据说明告警量将×4，建议告警阈值独立评审而非顺手改。
+boundary:
+  constraint: ~
+  violation_signals: []
+anchors:
+  score_1: 只写「慢请求 = >5s」一句定义。
+  score_3: 写了定义但没做迁移影响说明。
+  score_5: 定义 + 各页迁移对照 + 数字变化预告；追问时把告警拆出去。
