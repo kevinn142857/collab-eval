@@ -42,7 +42,8 @@ def http_json(url, headers, payload, timeout=120):
     req = urllib.request.Request(
         url,
         data=json.dumps(payload).encode("utf-8"),
-        headers={"Content-Type": "application/json", **headers},
+        headers={"Content-Type": "application/json",
+                 "User-Agent": "collab-eval-scaffold/v1", **headers},
         method="POST",
     )
     with urllib.request.urlopen(req, timeout=timeout) as resp:
