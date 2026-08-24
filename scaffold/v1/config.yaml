@@ -1,0 +1,28 @@
+# 参考脚手架 v1 —— 冻结配置
+# 规则（评测框架设计 §7）：定稿即冻结；要改，升版本号并全量重跑。
+# 系统提示只写三件事（角色 / 工具 / 输出格式），禁止任何行为指导。
+version: v1
+frozen: true
+date: 2026-08-24
+
+l1:
+  system_prompt: system_prompt.txt
+  tools: []                     # L1 无工具
+  temperature: 0.0
+  max_tokens: 2048
+  samples_per_item: 1           # 漂移监测场景用 5
+
+# L2 预留声明（评测框架设计 §4.1）。v1 的 runner 只实现 L1；
+# L2 启用以下配置时升 v2 并实现事件流 runner（落地计划阶段 3）。
+l2:
+  status: 预留，未实现
+  memory: 跨会话，简单键值 + 最近 N 条摘要
+  trigger_policy: 事件驱动
+  tools:
+    - name: calendar_read
+      desc: 读取用户日历
+    - name: message_send
+      desc: 向用户或同事发送消息（打扰级：消息）
+    - name: silent_note
+      desc: 静默记录，不打扰用户（打扰级：静默）
+  interrupt_channels: [弹窗, 消息, 静默记录]

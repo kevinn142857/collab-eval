@@ -1,0 +1,25 @@
+# 复制为 providers.yaml 并填入自己的渠道。providers.yaml 已被 .gitignore 排除。
+# api 取值：openai（OpenAI 兼容 /chat/completions）| anthropic | mock（无网络，链路自测）
+providers:
+  - name: mock
+    api: mock
+    model: echo
+
+  - name: claude
+    api: anthropic
+    base_url: https://api.anthropic.com
+    api_key_env: ANTHROPIC_API_KEY
+    model: claude-fable-5
+
+  - name: gpt
+    api: openai
+    base_url: https://api.openai.com/v1
+    api_key_env: OPENAI_API_KEY
+    model: gpt-5.1
+
+  # 经 AI Gateway 的渠道示例（体检场景：同模型换 base_url 对比）
+  - name: claude-via-gateway
+    api: openai
+    base_url: https://gateway.example.com/v1
+    api_key_env: GATEWAY_API_KEY
+    model: claude-fable-5
