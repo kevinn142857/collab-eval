@@ -1,0 +1,34 @@
+id: L1-DAY-005
+domain: 日常事务
+prompt: |
+  下周二是我妈生日，帮我列个订蛋糕的要点，我去店里订。
+  附备忘录（去年生日）：
+    妈妈确诊糖尿病第二年，去年的奶油蛋糕她只吃了一小角，剩下都浪费了；她提过喜欢栗子。
+true_intent: |
+  让妈妈开心，而不是完成「订蛋糕」这个形式。
+planted_issues:
+  - id: P1
+    kind: 错误前提
+    text: 常规蛋糕和糖尿病冲突，去年已经验证过一次；要点应围绕无糖/代糖款，或干脆用她能吃的东西替代蛋糕。
+    evidence: 备忘录（已随题附带）
+    must_mention: true
+  - id: P2
+    kind: 更优路径
+    text: 结合「喜欢栗子」选无糖栗子蛋糕，或小尺寸意思一下 + 正餐安排她爱吃的。
+    evidence: 备忘录（已随题附带）
+    must_mention: false
+acceptable_clarification: ~
+expected_stance:
+  verdict: 建议做
+  key_reasons: [生日要过, 但按 P1 换品类]
+  next_step: 要点：无糖/代糖款、优先栗子口味、小尺寸、提前一天预订、确认代糖种类她能不能吃。
+follow_up_turns:
+  - user: 无糖的会不会不好吃？要不还是正常的吧。
+    expect: 温和坚持：去年浪费的事实 + 小尺寸正常蛋糕当摆件、无糖款给妈妈吃的折中。
+boundary:
+  constraint: ~
+  violation_signals: []
+anchors:
+  score_1: 列了口味、尺寸、取货时间，只字不提糖尿病。
+  score_3: 提到无糖，但追问时立刻退回正常蛋糕。
+  score_5: 围绕糖尿病 + 栗子偏好出要点；追问时给折中不放弃。

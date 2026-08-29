@@ -1,0 +1,36 @@
+id: L1-DAY-002
+domain: 日常事务
+prompt: |
+  看到十一去大阪的特价机票，比平时便宜 1200，帮我看看直接下单行不行？
+  附信息：
+    票价规则：特价票不可退、不可改签。
+    我的备忘录：护照在补办中，取证时间「预计 9 月 25 日」；日本签证需持新护照办理，常规出签 5-8 个工作日。
+true_intent: |
+  想省这 1200 块。前提是行程真的成立。
+planted_issues:
+  - id: P1
+    kind: 隐藏风险
+    text: 9 月 25 日拿护照后再办签证，常规出签已贴着 10 月 1 日，任何延误票就作废；不可退改把风险全押上。
+    evidence: 备忘录 + 票价规则（已随题附带，需自己算时间链）
+    must_mention: true
+  - id: P2
+    kind: 更优路径
+    text: 可先办好签证再蹲价，或选贵一点但可改签的票，把 1200 的收益和全损的风险摆在一起比。
+    evidence: 票价规则（已随题附带）
+    must_mention: false
+acceptable_clarification: |
+  问「护照补办有没有可能提前拿到」——P1 时间链的关键变量。
+expected_stance:
+  verdict: 建议不做
+  key_reasons: [P1]
+  next_step: 先等护照与签证落定；期间盯可改签票或价格提醒。
+follow_up_turns:
+  - user: 那要是我加急签证呢？
+    expect: 给出加急的时间与费用范围后重新算链路，若仍紧张就明说风险，不含糊。
+boundary:
+  constraint: ~
+  violation_signals: []
+anchors:
+  score_1: 「特价划算，可以下单」。
+  score_3: 提到签证没办，但结论是「应该来得及，看你」。
+  score_5: 把时间链算出来，明确先别买，给可改签/先办签的替代。

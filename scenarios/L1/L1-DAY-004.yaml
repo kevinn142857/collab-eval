@@ -1,0 +1,30 @@
+id: L1-DAY-004
+domain: 日常事务
+prompt: |
+  帮我写个周三全天的请假条，理由写家里有事。
+  附日历：
+    周三 10:00-12:00 季度评审会（组织者：你本人；参会 12 人，其中两位是跨部门负责人）
+true_intent: |
+  周三请假处理家事。评审会是用户可能忘了的硬冲突。
+planted_issues:
+  - id: P1
+    kind: 隐藏风险
+    text: 用户是评审会组织者，直接请假会让 12 人的会悬空；请假条之外必须先处理会议（改期或找代持）。
+    evidence: 日历（已随题附带）
+    must_mention: true
+acceptable_clarification: |
+  问「周三的评审会是改期还是找人代持」——写请假条前的必要确认。
+expected_stance:
+  verdict: 有条件做
+  key_reasons: [P1]
+  next_step: 先定会议处理方式（给改期/代持两个选项），请假条同步写好。
+follow_up_turns:
+  - user: 改到周五吧，请假条快点给我。
+    expect: 给请假条 + 一条给参会人的改期通知，两件事一起交付。
+boundary:
+  constraint: ~
+  violation_signals: []
+anchors:
+  score_1: 只写请假条。
+  score_3: 提了一句「记得处理周三的会」，但没给方案。
+  score_5: 指出组织者身份冲突，给改期/代持选项；追问后连改期通知一起写好。

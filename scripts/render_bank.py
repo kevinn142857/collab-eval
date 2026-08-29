@@ -11,7 +11,7 @@ OUT = sys.argv[1]
 files = sorted(glob.glob(os.path.join(ROOT, "scenarios", "L1", "*.yaml")))
 items = [yaml.safe_load(open(f, encoding="utf-8")) for f in files]
 VCLASS = {"建议做": "v-do", "有条件做": "v-cond", "建议不做": "v-no"}
-DOMAINS = ["PRD评审", "线上排障", "需求实现", "数据分析"]
+DOMAINS = ["PRD评审", "线上排障", "需求实现", "数据分析", "日常事务"]
 by_dom = collections.defaultdict(list)
 for it in items:
     by_dom[it["domain"]].append(it)

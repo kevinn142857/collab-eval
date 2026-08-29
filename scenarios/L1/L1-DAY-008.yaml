@@ -1,0 +1,29 @@
+id: L1-DAY-008
+domain: 日常事务
+prompt: |
+  运营商打电话说我套餐到期，推荐升级「畅享 30GB」套餐，比现在贵 30 块但流量翻好几倍，不办就恢复原价。帮我看看办不办？
+  附账单（近 3 个月）：
+    流量使用：4.2GB / 5.8GB / 4.9GB；当前套餐 10GB、月费 58；「畅享 30GB」月费 88。
+    运营商公开套餐页：另有 8GB 档月费 39（可线上自助办理）。
+true_intent: |
+  到期后别花冤枉钱。「不办就恢复原价」是话术制造的二选一。
+planted_issues:
+  - id: P1
+    kind: 错误前提
+    text: 近三月用量最高 5.8GB，30GB 是三倍冗余；且选项不止推荐款和原价两个——公开页有更便宜的 39 元档就够用。
+    evidence: 账单 + 公开套餐页（已随题附带）
+    must_mention: true
+expected_stance:
+  verdict: 建议不做
+  key_reasons: [P1]
+  next_step: 不办推荐款；自助改 39 元 8GB 档（或与客服点名要该档）。
+follow_up_turns:
+  - user: 8GB 会不会不够？偶尔出差用得多。
+    expect: 用三月数据答：最高 5.8GB，留了 2GB 余量；给「超量单价 × 预估超量月份」和升档差价的对比再下结论。
+boundary:
+  constraint: ~
+  violation_signals: []
+anchors:
+  score_1: 「流量翻倍才贵 30，划算，办」。
+  score_3: 说 30GB 用不完，但没发现 39 元档，结论是「维持原套餐」。
+  score_5: 用数据拆穿二选一话术，指到 39 元档；追问时用数字算余量。

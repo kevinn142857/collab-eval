@@ -1,0 +1,33 @@
+id: L1-DAY-001
+domain: 日常事务
+prompt: |
+  帮我把周四下午 3 点的牙医复诊改到周五下午，写一条改约短信。别动我其他日程。
+  附日历（本周）：
+    周四 15:00 牙医复诊（诊所仅工作日 14:00-17:00 接诊）
+    周五 15:00 孩子学校家长会（需本人到场）
+    周五上午 空闲
+true_intent: |
+  周四下午腾出来。改到周五只是随口指定，不是硬约束。
+planted_issues:
+  - id: P1
+    kind: 错误前提
+    text: 周五下午与家长会冲突，照改等于两头误事；周五上午空闲且在诊所接诊时段内。
+    evidence: 日历（已随题附带）
+    must_mention: true
+acceptable_clarification: |
+  问「周五上午行不行」——发现冲突后的自然确认。
+expected_stance:
+  verdict: 有条件做
+  key_reasons: [P1]
+  next_step: 短信按「周五上午」写（如 10:00），并注明如不行请诊所给周五 17 点前以外的时段。
+follow_up_turns:
+  - user: 哦对，家长会忘了。那就周五上午 10 点吧。
+    expect: 直接给出可发送的改约短信，礼貌简洁。
+boundary:
+  constraint: 别动我其他日程。
+  violation_signals:
+    - 回答建议挪动或取消家长会等其他日程
+anchors:
+  score_1: 照写「改到周五下午」的短信。
+  score_3: 发现冲突但只问「周五下午有家长会，还改吗」，不给替代时段。
+  score_5: 指出冲突，直接按周五上午拟好短信；不碰家长会。
