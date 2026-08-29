@@ -1,0 +1,46 @@
+<title>协作智能题库</title>
+<style>
+:root{--bg:#faf9f6;--fg:#2b2a27;--muted:#6f6b62;--line:#e3dfd6;--card:#ffffff;
+--do:#1d7a4f;--do-bg:#e7f3ec;--cond:#8a6410;--cond-bg:#f7efdb;--no:#a33a2e;--no-bg:#f8e9e6;
+--accent:#3b5b92;--code:#eee9df}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+--bg:#1d1c1a;--fg:#e8e5de;--muted:#a29c8f;--line:#3a3833;--card:#26241f;
+--do:#63c491;--do-bg:#1e3329;--cond:#d9b35c;--cond-bg:#38301c;--no:#e08a7c;--no-bg:#3a2622;
+--accent:#8fadd9;--code:#33312b}}
+:root[data-theme="dark"]{
+--bg:#1d1c1a;--fg:#e8e5de;--muted:#a29c8f;--line:#3a3833;--card:#26241f;
+--do:#63c491;--do-bg:#1e3329;--cond:#d9b35c;--cond-bg:#38301c;--no:#e08a7c;--no-bg:#3a2622;
+--accent:#8fadd9;--code:#33312b}
+body{background:var(--bg);color:var(--fg);font:16px/1.75 "Source Han Serif SC","Songti SC",Georgia,serif;margin:0;padding:2.5rem 1rem 5rem}
+main{max-width:46rem;margin:0 auto}
+h1{font-size:1.7rem;letter-spacing:.02em;margin:0 0 .3rem;text-wrap:balance}
+.sub{color:var(--muted);margin:0 0 1.6rem}
+.stats{display:flex;gap:.6rem;flex-wrap:wrap;margin:0 0 2rem}
+.stats span{border:1px solid var(--line);border-radius:999px;padding:.15rem .8rem;font-size:.85rem;font-family:"PingFang SC",sans-serif;background:var(--card)}
+h2{font-size:1.15rem;border-bottom:1px solid var(--line);padding-bottom:.35rem;margin:2.4rem 0 1rem}
+.count{color:var(--muted);font-size:.8rem;font-weight:400;margin-left:.5rem}
+.card{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--line);border-radius:8px;margin:.6rem 0;padding:.15rem 1rem}
+.card.v-do{border-left-color:var(--do)}.card.v-cond{border-left-color:var(--cond)}.card.v-no{border-left-color:var(--no)}
+summary{cursor:pointer;padding:.55rem 0;font-family:"PingFang SC",sans-serif;font-size:.95rem}
+summary code{background:var(--code);border-radius:4px;padding:.1rem .45rem;font-size:.85rem;margin-right:.4rem}
+.chip{display:inline-block;border-radius:999px;padding:.02rem .6rem;font-size:.75rem;margin-right:.3rem}
+.chip.v-do{background:var(--do-bg);color:var(--do)}.chip.v-cond{background:var(--cond-bg);color:var(--cond)}
+.chip.v-no{background:var(--no-bg);color:var(--no)}
+.chip.c-pair,.chip.c-bound{border:1px solid var(--line);color:var(--muted)}
+h4{font-size:.8rem;letter-spacing:.12em;color:var(--muted);font-family:"PingFang SC",sans-serif;margin:1.1rem 0 .3rem}
+.material{background:var(--code);border-radius:6px;padding:.7rem .9rem;white-space:pre-wrap;font:.88rem/1.7 "PingFang SC",sans-serif;overflow-x:auto;margin:0}
+p,li{margin:.25rem 0}
+ul{padding-left:1.2rem;margin:.2rem 0}
+.ev{color:var(--muted);font-size:.85rem}
+.anchor{border-collapse:collapse;font-size:.88rem;margin:.3rem 0 1rem;width:100%}
+.anchor th{color:var(--muted);font-weight:500;padding:.25rem .7rem .25rem 0;vertical-align:top;white-space:nowrap}
+.anchor td{padding:.25rem 0;border-bottom:1px dashed var(--line)}
+nav a{color:var(--accent);text-decoration:none;margin-right:1rem;font-family:"PingFang SC",sans-serif;font-size:.9rem}
+</style>
+<main>
+<h1>协作智能题库</h1>
+<p class="sub">L1 协作分 · 通用题库 v1 · 供审题与盲验通读</p>
+<div class="stats"><span>共 @N@ 题</span><span>建议做 @DO@</span><span>有条件做 @COND@</span><span>建议不做 @NO@</span><span>配对施压 @PAIR@</span><span>含红线 @BOUND@</span></div>
+<nav>@NAV@</nav>
+@CARDS@
+</main>
