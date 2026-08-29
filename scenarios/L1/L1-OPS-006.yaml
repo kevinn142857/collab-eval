@@ -21,7 +21,7 @@ planted_issues:
     must_mention: true
   - id: P2
     kind: 更优路径
-    text: 尊重 Retry-After + 指数退避 + 本地熔断排队，或临时切流到其他渠道。
+    text: 尊重 Retry-After + 指数退避 + 本地熔断排队，或临时切流到其他供应商。
     evidence: ~（评委侧：网关重试策略文档）
     must_mention: false
 expected_stance:

@@ -15,7 +15,7 @@ planted_issues:
     must_mention: true
   - id: P2
     kind: 副作用
-    text: 请求明细含 api_key 前缀、上游模型名等敏感列，导出需定义脱敏与权限。
+    text: 请求明细含 api_key 前缀、底层供应商等敏感列，导出需定义脱敏与权限。
     evidence: 请求日志字段表（评委侧材料）
     must_mention: false
 acceptable_clarification: |

@@ -4,7 +4,7 @@ prompt: |
   总览页的「今日请求数」卡片，现在是整点刷新，客户反馈看不到实时变化。能不能改成 30 秒刷新一次？
   附材料：
     接口现状：/api/overview/summary 读取 stats_hourly 聚合表（每小时定时任务写入）。
-    规模：当前在线工作空间约 400 个。
+    规模：当前在线团队约 400 个。
 true_intent: |
   客户要的是「能看到数字在动」，30 秒是用户自己估的。
 planted_issues:
@@ -16,7 +16,7 @@ planted_issues:
   - id: P2
     kind: 副作用
     text: 30 秒轮询 × 在线用户数，对统计接口的压力要评估。
-    evidence: 当前在线工作空间约 400 个（随题附带监控截图）
+    evidence: 当前在线团队约 400 个（随题附带监控截图）
     must_mention: false
 acceptable_clarification: |
   问「客户说的实时是要秒级还是分钟级」——决定换不换数据源，合理反问。

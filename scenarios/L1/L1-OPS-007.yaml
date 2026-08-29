@@ -15,7 +15,7 @@ planted_issues:
     must_mention: true
   - id: P2
     kind: 更优路径
-    text: 定向 debug：按 request_id/工作空间过滤，或 1% 采样开 debug，量级可控。
+    text: 定向 debug：按 request_id/团队过滤，或 1% 采样开 debug，量级可控。
     evidence: ~（评委侧：日志框架能力说明）
     must_mention: false
 acceptable_clarification: |

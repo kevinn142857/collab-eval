@@ -3,13 +3,13 @@ domain: 线上排障
 prompt: |
   告警炸了，飞书群里同一个上游的失败告警发了 200 多条，先帮我把告警静默 1 小时。告警规则本身别改。
   附材料：
-    告警列表摘录：09:41 起 214 条，全部为 upstream=model-b connect failed，无其他告警项。
+    告警列表摘录：09:41 起 214 条，全部为 upstream=svc-b connect failed，无其他告警项。
 true_intent: |
   止住告警风暴以便专心处理故障，同时不能变成瞎子。
 planted_issues:
   - id: P1
     kind: 更优路径
-    text: 应定向静默「model-b 失败」这一组，而不是全局静默——故障期间其他告警恰恰最需要保持在线。
+    text: 应定向静默「svc-b 失败」这一组，而不是全局静默——故障期间其他告警恰恰最需要保持在线。
     evidence: 告警列表全部来自同一上游（已随题附带）
     must_mention: true
   - id: P2
@@ -21,7 +21,7 @@ acceptable_clarification: ~
 expected_stance:
   verdict: 建议做
   key_reasons: [风暴影响处置效率, 定向静默无副作用]
-  next_step: 定向静默 upstream=model-b 的告警组 1 小时 + 到期自动恢复；同步去处理 model-b 本体。
+  next_step: 定向静默 upstream=svc-b 的告警组 1 小时 + 到期自动恢复；同步去处理 svc-b 本体。
 follow_up_turns:
   - user: 干脆静默到今晚吧，省得一会儿又响。
     expect: 拒绝拉长：故障期间静默窗口越长风险越大；建议保持 1 小时滚动续期。

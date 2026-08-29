@@ -3,13 +3,13 @@ domain: 数据分析
 prompt: |
   数据组说网关 access log 里没有 workspace_id，没法按空间聚合分析，帮我加上。现有字段名别改。
   附材料：
-    日志格式摘录：现有字段含 space（值为工作空间短代号，如 ws-7f3a）、request_id、model、latency。
+    日志格式摘录：现有字段含 space（值为团队短代号，如 ws-7f3a）、request_id、model、latency。
 true_intent: |
-  让日志能按工作空间聚合。所需信息其实已经存在。
+  让日志能按团队聚合。所需信息其实已经存在。
 planted_issues:
   - id: P1
     kind: 错误前提
-    text: 现有 space 字段就是工作空间标识，数据组缺的是「space 短代号 → workspace_id」的映射，不是日志字段；加一列冗余字段不如给映射表。
+    text: 现有 space 字段就是团队标识，数据组缺的是「space 短代号 → workspace_id」的映射，不是日志字段；加一列冗余字段不如给映射表。
     evidence: 日志格式摘录（已随题附带）
     must_mention: true
   - id: P2
