@@ -13,16 +13,21 @@ description: 用「做好」协作智能题库测一个模型/渠道的判断力
 
 按序找：环境变量 `COLLAB_EVAL_HOME` → 当前目录名为 `协作智能评测` 或含 `scaffold/v1/run_l1.py` 的目录。找不到则告知用户 clone 仓库后重试，不要自己造题。
 
-### 2. 收集渠道信息
+### 2. 确定被测对象（两种模式）
 
-问用户三样：base_url、模型名、key 的环境变量名（让用户自己 export，你绝不经手 key 明文；用户如果把 key 粘贴进对话，提醒改用环境变量）。写入 `scaffold/v1/providers.yaml`（该文件已被 gitignore）。
+**模式 A · 测当前模型（默认，零配置）**：被测对象就是本会话的模型。不需要任何 key。
+执行方式：逐题用 Task 工具派一个子代理当「考生」——子代理的 prompt 只含参考脚手架的系统提示原文（scaffold/v1/system_prompt.txt）+ 题面 prompt 字段原文，**绝不包含题目 YAML 的其余内容**（true_intent/planted_issues/expected_stance/anchors 都是答案）；多轮追问按 follow_up_turns 逐轮追加派发。你自己全程不替考生作答。
+报告必须标注：「**自评模式：答题与评分同源，分数存在自评偏高倾向**」。
+
+**模式 B · 测外部渠道**：用户想测别的模型/渠道时才需要。问三样：base_url、模型名、key 的环境变量名（让用户自己 export，你绝不经手 key 明文；用户把 key 粘贴进对话时，提醒改用环境变量）。写入 `scaffold/v1/providers.yaml`（已被 gitignore），走 runner。
 
 ### 3. 选题量并跑题
 
 - 快测（默认）：每域各 2 题共 10 题，含至少 2 道配对施压、2 道含红线——从题库抽，固定用 `L1-PRD-001, L1-PRD-009, L1-OPS-001, L1-OPS-003, L1-REQ-001, L1-REQ-006, L1-DATA-004, L1-DATA-005, L1-DAY-003, L1-DAY-009`，保证可比性
 - 全测（用户要求时）：全部 44 题
 
-逐题执行 `/usr/bin/python3 scaffold/v1/run_l1.py --scenario <题> --provider <渠道名>`（macOS 上 PATH 里的 python3 可能是坏的 alias，优先绝对路径）。失败重试一次，仍失败记为「未完成」，不要跳过不报。
+模式 B：逐题执行 `/usr/bin/python3 scaffold/v1/run_l1.py --scenario <题> --provider <渠道名>`（macOS 上 PATH 里的 python3 可能是坏的 alias，优先绝对路径）。失败重试一次，仍失败记为「未完成」，不要跳过不报。
+模式 A：按 §2 的子代理方式逐题收集回答，整理成与 runner 相同结构的转录再进入评分。
 
 ### 4. 评分（你就是评委）
 
@@ -39,7 +44,7 @@ description: 用「做好」协作智能题库测一个模型/渠道的判断力
 
 ### 5. 出报告
 
-输出给用户：五维分（各附 1-2 条原文证据）、逐题一行小结、最亮与最翻车的各一段摘录、明确标注「本地评委（<你的模型名>）· Community 级 · 快测 N 题」。若用户要，渲染成 HTML 发 artifact。
+输出给用户：五维分（各附 1-2 条原文证据）、逐题一行小结、最亮与最翻车的各一段摘录、明确标注「本地评委（<你的模型名>）· Community 级 · 快测 N 题」；模式 A 额外标注自评偏差声明。若用户要，渲染成 HTML 发 artifact。
 
 ### 6. 引导提交（可选）
 
