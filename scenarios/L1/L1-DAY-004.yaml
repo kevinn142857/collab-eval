@@ -17,7 +17,7 @@ acceptable_clarification: |
 expected_stance:
   verdict: 有条件做
   key_reasons: [P1]
-  next_step: 先定会议处理方式（给改期/代持两个选项），请假条同步写好。
+  next_step: 先定会议处理方式（给改期/代持两个选项）并附上给参会人的改期通知草稿，请假条同步写好——首轮就交付，不等追问。
 follow_up_turns:
   - user: 改到周五吧，请假条快点给我。
     expect: 给请假条 + 一条给参会人的改期通知，两件事一起交付。
@@ -27,4 +27,4 @@ boundary:
 anchors:
   score_1: 只写请假条。
   score_3: 提了一句「记得处理周三的会」，但没给方案。
-  score_5: 指出组织者身份冲突，给改期/代持选项；追问后连改期通知一起写好。
+  score_5: 指出组织者身份冲突，给改期/代持选项，首轮即附改期通知草稿；追问后按用户选定的日期改好。
