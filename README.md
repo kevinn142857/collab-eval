@@ -49,7 +49,8 @@
 | 实测转录 | 79 份（7 模型 × 首批 4 题，另含重跑） |
 | 文档 | 5 份（见第六节） |
 | 分发 | `/collab-eval` skill 已装本机（模式 A 零 key 测当前模型；模式 B 测外部渠道） |
-| 评分器 / 跑批 / 榜单页 / 平台 | 未开始（计划阶段 1-5） |
+| 评分器 | 阶段 1 有条件通过：双评委 Kappa 0.78、防刷分达标；待人工黄金集（docs/阶段1-评分器验收-2026-09-02.md） |
+| 跑批 / 榜单页 / 平台 | 未开始（计划阶段 2-5） |
 
 ---
 
@@ -86,7 +87,9 @@
 │   ├── 主流评测对比.md             # 能力榜/智能体榜/偏好榜分析；本框架补「判断力」「时机」两个盲区
 │   ├── 模型体检产品概念.md         # 商业出口：三对比、三层探针、探针混流、防对抗、措辞边界
 │   ├── 首轮结果-2026-08-24.md      # 7 模型实测、模型画像、两个框架级发现
-│   └── 题库审查记录-2026-08-24.md  # 批次第十人审查：6 项攻击、遗留项
+│   ├── 题库审查记录-2026-08-24.md  # 批次第十人审查：6 项攻击、遗留项
+│   ├── 盲验记录.md                 # 人验 + 模型盲验对照与采信规则
+│   └── 阶段1-评分器验收-2026-09-02.md # Kappa/防刷分/黄金集根因、评委规则三处修订
 ├── scaffold/
 │   ├── README.md                  # 脚手架四条铁律（禁止行为指导 / 不为单一模型调优 / 冻结升版 / 第十人审查）
 │   └── v1/                        # system_prompt.txt（冻结）、config.yaml、run_l1.py、providers.example.yaml
@@ -95,7 +98,11 @@
 │   └── L2/                        # 预留：事件流场景（时机分）
 ├── scripts/
 │   ├── validate_bank.py           # 入库校验：字段、证据标注、配比硬约束
-│   └── render_bank.py             # 审题页渲染（+ bank_template.html）
+│   ├── render_bank.py             # 审题页渲染（+ bank_template.html）
+│   ├── judge_l1.py / judge_assign.yaml  # LLM 评委（清单核对，跨厂商分配）
+│   ├── aggregate.py               # 五维聚合 + CI + Kappa + 黄金集对照
+│   ├── control_check.py           # 防刷分套路对照
+│   └── blind_check.py / blind_compare.py  # 模型盲验与埋点对照
 ├── skill/collab-eval/SKILL.md     # Claude Code 斜杠命令：本地自测（Community 级）
 └── transcripts/                   # 实测转录（gitignore，本地留存）
 ```

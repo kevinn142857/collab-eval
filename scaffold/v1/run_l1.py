@@ -18,6 +18,8 @@ import datetime
 import json
 import os
 import sys
+import time
+import urllib.error
 import urllib.request
 
 import yaml
@@ -38,7 +40,10 @@ def load_scaffold():
     return cfg, system_prompt
 
 
-def http_json(url, headers, payload, timeout=120):
+RETRY_SLEEPS = (5, 15, 40)  # 渠道 5xx / 超时 / 断连时退避重试（阶段 0 实测：SSL EOF、504）
+
+
+def http_json(url, headers, payload, timeout=180):
     req = urllib.request.Request(
         url,
         data=json.dumps(payload).encode("utf-8"),
@@ -46,8 +51,21 @@ def http_json(url, headers, payload, timeout=120):
                  "User-Agent": "collab-eval-scaffold/v1", **headers},
         method="POST",
     )
-    with urllib.request.urlopen(req, timeout=timeout) as resp:
-        return json.loads(resp.read().decode("utf-8"))
+    last = None
+    for attempt in range(len(RETRY_SLEEPS) + 1):
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                return json.loads(resp.read().decode("utf-8"))
+        except urllib.error.HTTPError as e:
+            if e.code < 500 or attempt == len(RETRY_SLEEPS):
+                raise
+            last = e
+        except (urllib.error.URLError, TimeoutError, ConnectionError, OSError) as e:
+            if attempt == len(RETRY_SLEEPS):
+                raise
+            last = e
+        time.sleep(RETRY_SLEEPS[attempt])
+    raise last
 
 
 def call_model(provider, system_prompt, messages, l1cfg):
