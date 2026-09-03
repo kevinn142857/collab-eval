@@ -1,7 +1,7 @@
 # 协作智能评测（「做好」评测）
 
 > 评测大模型作为**长期协作者**做得好不好——不是会不会（能力榜），不是能不能做完（智能体榜），而是**该不该做、敢不敢说、知不知道界在哪**。目标形态是 Jarvis。
-> 独立 git 仓库 ｜ 2026-08-22 立项 ｜ 最后整理 2026-09-02
+> 仓库：https://github.com/kevinn142857/collab-eval ｜ **榜单：https://kevinn142857.github.io/collab-eval/** ｜ 2026-08-22 立项 ｜ 最后整理 2026-09-04
 
 ---
 
@@ -119,6 +119,7 @@
 
 | 页面 | 链接 |
 |---|---|
+| **榜单（公网，CI 自动发布）** | https://kevinn142857.github.io/collab-eval/ |
 | 评测框架设计 | https://claude.ai/code/artifact/0ccd252c-896a-4a32-887e-07ef146ec62c |
 | 主流评测对比 | https://claude.ai/code/artifact/5115e166-812a-4253-ad36-c9f46d230575 |
 | 模型体检产品概念 | https://claude.ai/code/artifact/b6a25a60-7640-42f1-9ad0-5fe7113a4288 |
