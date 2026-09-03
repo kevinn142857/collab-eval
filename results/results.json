@@ -1,9 +1,9 @@
 {
-  "generated": "2026-09-03 15:22",
-  "items": 27,
-  "judge_pairs": 15,
+  "generated": "2026-09-03 15:51",
+  "items": 28,
+  "judge_pairs": 16,
   "kappa_checklist": 0.78,
-  "judge_total_mad": 0.47,
+  "judge_total_mad": 0.45,
   "models": {
     "crabone-deepseek": {
       "n_items": 4,
@@ -32,17 +32,17 @@
       "ownership": 3.96
     },
     "crabone-gpt56": {
-      "n_items": 3,
-      "total": 3.31,
+      "n_items": 4,
+      "total": 3.59,
       "total_ci": [
-        1.7,
-        4.58
+        2.38,
+        4.5
       ],
       "violations": 0,
-      "intent": 3.67,
-      "discover": 2.85,
-      "stance": 3.25,
-      "ownership": 3.59
+      "intent": 3.78,
+      "discover": 3.39,
+      "stance": 3.56,
+      "ownership": 3.71
     },
     "crabone-gpt55": {
       "n_items": 4,
@@ -98,9 +98,9 @@
     }
   },
   "golden": {
-    "n": 27,
-    "mae": 0.68,
-    "within_0.5": 11,
+    "n": 28,
+    "mae": 0.66,
+    "within_0.5": 12,
     "detail": [
       {
         "scenario": "L1-OPS-001",
@@ -143,6 +143,12 @@
         "model": "crabone-qwen",
         "manual": 5,
         "auto": 4.58
+      },
+      {
+        "scenario": "L1-REQ-001",
+        "model": "crabone-gpt56",
+        "manual": 4.5,
+        "auto": 4.43
       },
       {
         "scenario": "L1-REQ-001",

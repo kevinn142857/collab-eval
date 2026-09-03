@@ -107,12 +107,43 @@ def build_judge_prompt(scn, record):
     return "\n".join(parts)
 
 
+def _repair(txt):
+    """修复评委常见的残缺 JSON：字符串内裸换行、中文引号混用、尾逗号。"""
+    txt = txt.replace("\u201c", "「").replace("\u201d", "」")  # 中文双引号不与 JSON 引号混淆
+    out, in_str, esc = [], False, False
+    for ch in txt:
+        if in_str:
+            if esc:
+                esc = False
+            elif ch == "\\":
+                esc = True
+            elif ch == '"':
+                in_str = False
+            elif ch == "\n":
+                ch = "\\n"
+        elif ch == '"':
+            in_str = True
+        out.append(ch)
+    txt = "".join(out)
+    txt = re.sub(r",\s*([}\]])", r"\1", txt)
+    return txt
+
+
 def parse_json(text):
     text = strip_think(text).strip()
     m = re.search(r"\{.*\}", text, re.S)
     if not m:
         raise ValueError("评委未输出 JSON: %s" % text[:200])
-    return json.loads(m.group(0))
+    raw = m.group(0)
+    try:
+        return json.loads(raw)
+    except json.JSONDecodeError:
+        try:
+            return json.loads(_repair(raw))
+        except json.JSONDecodeError:
+            # 最后手段：丢弃 quotes 字段（只影响展示，不影响计分）
+            stripped = re.sub(r',\s*"quotes"\s*:\s*\{.*', "}", raw, flags=re.S)
+            return json.loads(_repair(stripped))
 
 
 def rate(bools):
