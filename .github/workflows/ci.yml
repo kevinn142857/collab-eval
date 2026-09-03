@@ -20,9 +20,11 @@ jobs:
         run: python -m pytest -q tests
       - name: 校验外部提交（若 PR 含 submissions/）
         run: |
+          shopt -s nullglob
           for d in submissions/*/; do
-            [ -f "$d/manifest.json" ] && python -m collab_eval.cli submission verify "$d"
+            if [ -f "$d/manifest.json" ]; then python -m collab_eval.cli submission verify "$d"; fi
           done
+          echo "提交校验完成"
       - name: 重算分数并重出榜单页
         run: |
           python -m collab_eval.cli aggregate
