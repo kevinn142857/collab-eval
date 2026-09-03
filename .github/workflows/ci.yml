@@ -1,0 +1,43 @@
+name: ci
+# 每次 push / PR：不调用任何模型 API。校验题库、跑测试、用入库判定重算分数、重出榜单页，
+# 并检查结果页/results.json 是否与源数据一致（防止手改结果）。
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: pip install -r requirements.txt
+      - name: 题库校验
+        run: python -m collab_eval.cli validate
+      - name: 单元与冒烟测试
+        run: python -m pytest -q tests
+      - name: 校验外部提交（若 PR 含 submissions/）
+        run: |
+          for d in submissions/*/; do
+            [ -f "$d/manifest.json" ] && python -m collab_eval.cli submission verify "$d"
+          done
+      - name: 重算分数并重出榜单页
+        run: |
+          python -m collab_eval.cli aggregate
+          python -m collab_eval.cli report results/index.html
+      - name: 结果必须与源数据一致
+        run: |
+          # results.json 的 generated 时间戳每次不同，比较时剔除该字段
+          python - <<'PY'
+          import json, subprocess, sys
+          cur = json.load(open("results/results.json"))
+          old = json.loads(subprocess.run(["git", "show", "HEAD:results/results.json"], capture_output=True, text=True).stdout or "{}")
+          for d in (cur, old): d.pop("generated", None)
+          if cur != old:
+              print("results/results.json 与入库判定不一致：请本地运行 aggregate + report 后再提交"); sys.exit(1)
+          PY
+      - name: 上传榜单页
+        uses: actions/upload-artifact@v4
+        with: { name: leaderboard, path: results/index.html }

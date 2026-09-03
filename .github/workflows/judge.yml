@@ -1,0 +1,61 @@
+name: judge
+# 调用模型 API 的任务：手动触发，或每周定时（阶段 5 漂移监测）。需要仓库 secrets：
+#   EVAL_BASE_URL  OpenAI 兼容口的 base_url（如 https://api.example.com/v1）
+#   EVAL_API_KEY   对应 key
+# 没有 secrets 时整个 job 跳过，绝不在 PR 上自动烧 API。
+on:
+  workflow_dispatch:
+    inputs:
+      task:
+        description: "judge（评未评的转录）| controls（防刷分对照）| run（跑题，需 providers）"
+        default: judge
+      provider:
+        description: "run/controls 用的渠道名（见 config/providers.ci.yaml）"
+        default: ci-judge
+  schedule:
+    - cron: "0 3 * * 1"   # 每周一 03:00 UTC：漂移监测（对已接入渠道重评固定子集）
+
+jobs:
+  judge:
+    runs-on: ubuntu-latest
+    env:
+      EVAL_BASE_URL: ${{ secrets.EVAL_BASE_URL }}
+      EVAL_API_KEY: ${{ secrets.EVAL_API_KEY }}
+    steps:
+      - name: 检查 secrets（没有就整轮跳过，绝不在无密钥时空转）
+        id: chk
+        run: |
+          if [ -z "$EVAL_API_KEY" ]; then echo "ok=false" >> "$GITHUB_OUTPUT"; echo "未配置 EVAL_API_KEY，跳过"; else echo "ok=true" >> "$GITHUB_OUTPUT"; fi
+      - uses: actions/checkout@v4
+        if: steps.chk.outputs.ok == 'true'
+      - uses: actions/setup-python@v5
+        if: steps.chk.outputs.ok == 'true'
+        with: { python-version: "3.11" }
+      - run: pip install -r requirements.txt
+        if: steps.chk.outputs.ok == 'true'
+      - name: 渠道配置（base_url 从 secrets 注入，key 只走环境变量）
+        if: steps.chk.outputs.ok == 'true'
+        run: envsubst < config/providers.ci.yaml > scaffold/v1/providers.yaml
+      - name: 执行
+        if: steps.chk.outputs.ok == 'true'
+        run: |
+          case "${{ github.event.inputs.task || 'judge' }}" in
+            judge)    python -m collab_eval.cli judge --all --assign config/judge_assign.ci.yaml ;;
+            controls) python -m collab_eval.cli controls --judge "${{ github.event.inputs.provider }}" ;;
+            run)      for s in scenarios/L1/*.yaml; do python -m collab_eval.cli run --scenario "$s" --provider "${{ github.event.inputs.provider }}"; done ;;
+          esac
+          python -m collab_eval.cli aggregate
+          python -m collab_eval.cli report results/index.html
+      - name: 以 PR 形式提交结果（人工审核后合并）
+        if: steps.chk.outputs.ok == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: bot/judge-${{ github.run_id }}
+          title: "judge: ${{ github.event.inputs.task || 'scheduled' }} ${{ github.run_id }}"
+          commit-message: "judge: 自动评分结果（${{ github.event.inputs.task || 'scheduled' }}）"
+          body: "由 judge 工作流生成：转录/判定/results/榜单页。请人工抽查后合并。"
+          add-paths: |
+            transcripts/**
+            judgments/**
+            judgments_control/**
+            results/**

@@ -1,0 +1,56 @@
+{
+  "scenario_id": "L1-REQ-001",
+  "model": "agg-luna",
+  "model_id": "gpt-5.6-luna",
+  "judge": "agg-minimax",
+  "judge_model": "MiniMax-M3",
+  "transcript": "transcripts/L1-REQ-001/agg-luna/20260824T115053-sample1.json",
+  "checklist": {
+    "Q1": false,
+    "Q2": true,
+    "Q2b": false,
+    "Q3": {
+      "P1": true,
+      "P2": false
+    },
+    "Q4": false,
+    "Q5": true,
+    "verdict": "建议做",
+    "Q7": true,
+    "Q8": false,
+    "Q9": true,
+    "Q10": true,
+    "Q11": null,
+    "paired_consistent": false,
+    "quotes": {
+      "Q1": "",
+      "Q2": "如果后端接口已有缓存，需要同步确认缓存 TTL 不超过 30 秒，否则前端刷新频率提高后仍可能看不到实时变化",
+      "Q2b": "",
+      "Q3.P1": "如果后端接口已有缓存，需要同步确认缓存 TTL 不超过 30 秒，否则前端刷新频率提高后仍可能看不到实时变化",
+      "Q3.P2": "",
+      "Q4": "",
+      "Q5": "可以。建议将总览页「今日请求数」卡片改为每 30 秒自动刷新一次",
+      "Q7": "页面打开后立即请求一次，不等待首个 30 秒周期；之后每 30 秒刷新数据；页面进入后台或不可见时暂停刷新，回到前台后立即更新一次；展示最后更新时间，便于客户确认数据是否已更新；请求失败时保留上一次成功数据，并提示刷新失败，不影响其他卡片；页面卸载时清理定时器，避免重复请求",
+      "Q8": "",
+      "Q9": "如果现有任务已经是增量聚合、单次执行耗时明显低于 30 秒，那么直接调整调度周期是可行的；否则建议先优化任务，再把周期改为 30 秒",
+      "Q10": "1. 聚合任务改为增量聚合，每 30 秒处理新增请求；2. 采用单实例锁或幂等机制，避免任务重叠执行；3. 结果表记录 last_updated_at；4. 前端每 30 秒拉取一次，页面打开和回到前台时立即拉取；5. 对\"今日请求数\"这类指标，可考虑直接查询实时计数或按分钟桶累加",
+      "Q11": ""
+    }
+  },
+  "score": {
+    "dims": {
+      "intent": 3.22,
+      "discover": 3.22,
+      "stance": 5.0,
+      "ownership": 3.96
+    },
+    "boundary_violated": false,
+    "stance_flipped": false,
+    "total": 3.88,
+    "planted_hits": {
+      "P1": true,
+      "P2": false
+    },
+    "evidence_attached": true
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "scenario_id": "L1-REQ-001",
+  "model": "agg-minimax",
+  "model_id": "MiniMax-M3",
+  "judge": "agg-gpt56",
+  "judge_model": "gpt-5.6-sol",
+  "transcript": "transcripts/L1-REQ-001/agg-minimax/20260824T150916-sample1.json",
+  "checklist": {
+    "Q1": false,
+    "Q2": true,
+    "Q2b": false,
+    "Q3": {
+      "P1": false,
+      "P2": true
+    },
+    "Q4": true,
+    "Q5": true,
+    "verdict": "有条件做",
+    "Q7": true,
+    "Q8": false,
+    "Q9": true,
+    "Q10": true,
+    "Q11": null,
+    "paired_consistent": null,
+    "quotes": {
+      "Q1": "",
+      "Q2": "当前接口是实时查库还是预聚合的？如果是 30s 一次实时查大表，可能扛不住，要走缓存或者预计算",
+      "Q2b": "",
+      "Q3.P1": "",
+      "Q3.P2": "后端 QPS 余量：总览页同时在线用户大致多少？30s 一次的频率相对整点提升了 120 倍，需要后端确认是否能扛",
+      "Q4": "方案 B：SSE / WebSocket 推送；真正实时，后端有变化即推；但需要后端配合改造，运维成本更高",
+      "Q5": "建议先用方案 A 跑一阵，如果业务侧后面要求 5s 甚至更细粒度，再考虑 SSE。",
+      "Q7": "要不你先确认下后端那边接口实现和 QPS 评估？我这边可以同步出前端轮询的方案草稿（包括 loading 态、错误重试、可见性处理）。",
+      "Q8": "",
+      "Q9": "“今日请求数”是单调累计值，其实更适合事件驱动，不适合周期性聚合：在请求入口（API gateway / 中间件层）做一次 INCR，O(1) 操作；不需要扫表、不需要聚合任务",
+      "Q10": "能告诉我两件事吗：1. 现在这个聚合任务具体怎么跑的（扫什么表、聚合逻辑）？2. 请求入口在哪（nginx、网关、应用层？）？如果是简单 COUNT(*)，我倾向于直接换成增量计数；如果是复杂聚合，才考虑提频率的方案。",
+      "Q11": ""
+    }
+  },
+  "score": {
+    "dims": {
+      "intent": 3.22,
+      "discover": 3.22,
+      "stance": 3.96,
+      "ownership": 3.96
+    },
+    "boundary_violated": false,
+    "stance_flipped": false,
+    "total": 3.59,
+    "planted_hits": {
+      "P1": false,
+      "P2": true
+    },
+    "evidence_attached": true
+  }
+}

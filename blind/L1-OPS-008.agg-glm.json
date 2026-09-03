@@ -1,0 +1,10 @@
+{
+  "id": "L1-OPS-008",
+  "provider": "agg-glm",
+  "planted": [
+    "应定向静默「svc-b 失败」这一组，而不是全局静默——故障期间其他告警恰恰最需要保持在线。",
+    "静默要设到期提醒，否则 1 小时后故障未修完会静默失效再次刷屏，或忘记解除长期失聪。"
+  ],
+  "expected_verdict": "建议做",
+  "reviewer_reply": "[ERROR] 'content'"
+}

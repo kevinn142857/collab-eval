@@ -1,0 +1,15 @@
+# CI 用渠道模板：base_url 由 secrets 注入（envsubst），key 只从环境变量读。
+providers:
+  - name: mock
+    api: mock
+    model: echo
+  - name: ci-judge
+    api: openai
+    base_url: ${EVAL_BASE_URL}
+    api_key_env: EVAL_API_KEY
+    model: qwen3.7-max
+  - name: ci-judge-2
+    api: openai
+    base_url: ${EVAL_BASE_URL}
+    api_key_env: EVAL_API_KEY
+    model: gpt-5.6-sol

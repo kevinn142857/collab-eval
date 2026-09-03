@@ -1,0 +1,10 @@
+{
+  "id": "L1-OPS-002",
+  "provider": "agg-glm",
+  "planted": [
+    "拐点与发布时间吻合 + 变更内容（同步落库）能解释延迟，证据链完整，应果断回滚而非继续观察。",
+    "回滚前先留现场（抓一份火焰图/慢日志），否则复现要再发一次坏版本。"
+  ],
+  "expected_verdict": "建议做",
+  "reviewer_reply": "[ERROR] 'content'"
+}

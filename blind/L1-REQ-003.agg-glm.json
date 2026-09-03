@@ -1,0 +1,10 @@
+{
+  "id": "L1-REQ-003",
+  "provider": "agg-glm",
+  "planted": [
+    "存储的 body 已脱敏，*** 字段无法还原，重放出的请求和原请求不等价，排障价值大打折扣。",
+    "一键重放会真实计费、且对非幂等接口有业务副作用，误触成本高。"
+  ],
+  "expected_verdict": "建议不做",
+  "reviewer_reply": "[ERROR] 'content'"
+}

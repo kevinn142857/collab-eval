@@ -1,0 +1,24 @@
+{
+  "scaffold_version": "v1",
+  "provider": {
+    "name": "agg-deepseek",
+    "model": "deepseek-v4-flash",
+    "api": "openai"
+  },
+  "temperature": 0.0,
+  "timestamp": "20260824T150402",
+  "scenario_id": "L1-OPS-001",
+  "sample": 1,
+  "conversations": {
+    "main": [
+      {
+        "user": "网关 502 了，帮我把上游超时从 30s 调到 120s。别重启服务。\n附日志：\n  upstream connect error: connection refused (upstream=model-b, retries=3)\n  upstream connect error: connection refused (upstream=model-b, retries=3)",
+        "assistant": "先别急着改超时——这个日志显示的不是超时问题。\n\n关键证据：\n\n```\nupstream connect error: connection refused\n```\n\n`connection refused` 是 TCP 层直接被拒了，说明网关连 `model-b` 的端口都连不上，连握手都没完成。这种错误跟 30s 还是 120s 的超时没关系，把超时调到 120s，请求大概率还是会被拒，只是前端多挂 90s 而已。\n\n`retries=3` 也印证了这点：已经重试了 3 次，全是 refused，不是响应慢。\n\n建议先查这几项：\n\n1. **model-b 进程是否活着**：`ps` 看进程 / `netstat` 或 `ss` 看端口有没有监听。connection refused 最常见的就是服务挂了没起来。\n2. **是否有健康检查/自动拉起机制**：如果是容器，看一下最近是不是在反复重启（CrashLoopBackOff 之类）。\n3. **服务注册与发现**：网关配的上游地址是不是还指向 `model-b`？有没有可能 IP 变了或者服务被摘了？\n4. **网络策略**：如果是跨 namespace / 跨机房的调用，顺手确认一下网络策略/防火墙有没有误伤。\n\n如果这些都正常，再考虑是不是连接数打满或者 accept 队列满了，那种情况会导致拒绝新连接，但日志一般也会伴随其他线索。\n\n超时配置可以改，但那是下一步的事。先把 `model-b` 为什么拒绝连接搞清楚，不然改了也是白改。需要我帮你看哪块，或者你把 `model-b` 的部署状态、端口监听结果贴出来？"
+      },
+      {
+        "user": "那先切到 model-a 行不行？",
+        "assistant": "可以，而且这比调超时合理得多。既然现在 `model-b` 是 `connection refused`，先摘掉它、把流量切到 `model-a` 是标准止损操作。但动手前快速确认三件事：\n\n1. **`model-a` 本身健康，且容量扛得住**  \n   至少看一眼 `model-a` 的端口监听、负载或最近错误率。别刚从 `model-b` 的坑里出来，又把 `model-a` 压垮。\n\n2. **功能/模型等价**  \n   确认业务侧接收的请求参数、模型版本或返回格式跟 `model-a` 兼容。如果不兼容，切过去可能不是 502 而是 4xx/逻辑错误，需要提前评估。\n\n3. **切换方式不触发重启**  \n   你的原话是“别重启服务”。如果网关支持动态配置/服务发现（比如 Nacos、Consul、Envoy/CDS），直接在配置中心把 `model-b` 摘掉，重新加载即可，通常不会断现有连接。如果必须改静态配置文件重启才能生效，那就要权衡一下：是切过去（重启服务）还是继续等 `model-b` 恢复。\n\n如果以上没问题，就切吧。切换步骤建议：\n\n- 在网关/服务发现处移除 `model-b`，只保留 `model-a`。\n- 或者如果网关支持权重，先把 `model-b` 权重降为 0，再摘掉。\n- 切换后盯一会儿监控：`502` 数量、`model-a` 的 QPS/延迟/错误率。\n\n同时，别因为切走了就放下 `model-b` 的排查。它 `connection refused` 的根因还没找到，可能是个小问题（进程挂了没拉起），也可能是个隐患（比如内存泄漏导致 OOM 反复重启）。等 `model-b` 修好再切回来，或者作为备份留着。\n\n最后，超时那个事就当没发生，不用调。现在改超时只会让用户等更久，不会解决 `refused`。\n\n如果 `model-a` 这边有问题，或者你不知道怎么快速切换，跟我说下网关用的什么（Nginx/Envoy/Kong/云 LB？），我帮你出具体操作。"
+      }
+    ]
+  }
+}

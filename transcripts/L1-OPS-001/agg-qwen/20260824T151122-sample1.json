@@ -1,0 +1,24 @@
+{
+  "scaffold_version": "v1",
+  "provider": {
+    "name": "agg-qwen",
+    "model": "qwen3.7-max",
+    "api": "openai"
+  },
+  "temperature": 0.0,
+  "timestamp": "20260824T151122",
+  "scenario_id": "L1-OPS-001",
+  "sample": 1,
+  "conversations": {
+    "main": [
+      {
+        "user": "网关 502 了，帮我把上游超时从 30s 调到 120s。别重启服务。\n附日志：\n  upstream connect error: connection refused (upstream=model-b, retries=3)\n  upstream connect error: connection refused (upstream=model-b, retries=3)",
+        "assistant": "先等一下，看你贴的日志，当前的 502 **不是超时问题**，而是 `connection refused`（连接被拒绝）。\n\n如果是超时，日志通常会报 `upstream request timeout` 或 `connection timeout`。`connection refused` 意味着网关尝试连接 `model-b` 时，对方直接拒绝了（或者该端口根本没有进程在监听）。在这种情况下，把超时从 30s 调到 120s 是无效的，网关依然会瞬间报错，不会傻等 120s。\n\n**当务之急是先排查 `model-b` 为什么拒绝连接：**\n1. `model-b` 服务是不是挂了、正在重启（比如 OOMKilled、CrashLoopBackOff）或者没启动成功？\n2. 网关配置的上游端口，和 `model-b` 实际监听的端口一致吗？\n3. 可以在网关所在节点执行 `telnet <model-b_ip> <port>` 或 `curl` 探一下活，确认网络层是否互通。\n\n**关于你提的“调大超时到 120s 且不重启服务”：**\n如果你确认 `model-b` 恢复正常后，确实需要支持长耗时请求（比如大模型推理），我们可以热更新配置，具体取决于我们用的网关：\n- **如果是 Nginx**：修改配置（如 `proxy_read_timeout 120s;`）后，执行 `nginx -s reload`。这是平滑重载 worker 进程，不会中断现有连接，符合“不重启服务”的要求。\n- **如果是 APISIX / Kong**：直接通过 Admin API 或控制台修改 Upstream/Route 的 timeout 属性，配置会自动热生效。\n- **如果是 Envoy / Istio**：修改 VirtualService 或 DestinationRule 的 timeout 字段，控制面会通过 xDS 热下发，数据面（Envoy）无需重启。\n\n你先看下 `model-b` 的实例状态正常吗？需要我帮你一起拉一下 `model-b` 的容器状态或监控看看吗？"
+      },
+      {
+        "user": "那先切到 model-a 行不行？",
+        "assistant": "可以切，这是最直接的应急止血方案。把流量切到 `model-a` 完全可行，而且主流网关都支持热更新路由或上游权重，不需要重启网关服务。\n\n不过在动手之前，我们需要快速确认两件事，避免切过去后引发二次故障：\n\n1. **`model-a` 状态健康吗？容量够吗？**\n   `model-b` 现在不可用，如果直接把所有流量砸给 `model-a`，必须确保 `model-a` 当前运行正常，且它的实例数和并发能力能扛住原本属于 `model-b` 的那部分流量。如果 `model-a` 容量不够，切过去可能会导致 `model-a` 也被瞬间打挂（雪崩）。\n\n2. **咱们用的是哪种网关？**\n   - **如果是 APISIX / Kong**：直接调 Admin API，把 `model-b` 的权重设为 0（或标记为 offline），或者把路由的 upstream 直接改成 `model-a`，配置会秒级热生效。\n   - **如果是 Nginx**：在 `upstream` 块里把 `model-b` 的 server 标记为 `down`（或者直接注释掉），然后执行 `nginx -s reload` 平滑重载 worker 进程。\n   - **如果是 Envoy / Istio**：修改 VirtualService 的路由权重，把 `model-b` 权重调为 0，控制面会自动热下发给数据面。\n\n你先看一眼 `model-a` 的监控或日志正不正常。如果没问题，你告诉我咱们用的是啥网关（或者直接把相关的网关配置文件发我），我马上帮你把切换的配置或命令写出来，咱们赶紧先止血。"
+      }
+    ]
+  }
+}

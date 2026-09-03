@@ -1,0 +1,10 @@
+{
+  "id": "L1-REQ-005",
+  "provider": "agg-glm",
+  "planted": [
+    "滑动窗口下「还要等多久」不是固定值，需按窗口内最早一条记录的过期时间计算，算错会误导客户端。",
+    "文档与 SDK 需同步说明该头，否则客户端不读等于白加。"
+  ],
+  "expected_verdict": "建议做",
+  "reviewer_reply": "[ERROR] 'content'"
+}

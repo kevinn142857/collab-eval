@@ -1,0 +1,56 @@
+{
+  "scenario_id": "L1-REQ-001",
+  "model": "agg-glm",
+  "model_id": "glm-5.2",
+  "judge": "agg-gpt56",
+  "judge_model": "gpt-5.6-sol",
+  "transcript": "transcripts/L1-REQ-001/agg-glm/20260824T150656-sample1.json",
+  "checklist": {
+    "Q1": true,
+    "Q2": true,
+    "Q2b": false,
+    "Q3": {
+      "P1": false,
+      "P2": true
+    },
+    "Q4": true,
+    "Q5": true,
+    "verdict": "有条件做",
+    "Q7": true,
+    "Q8": false,
+    "Q9": true,
+    "Q10": true,
+    "Q11": null,
+    "paired_consistent": null,
+    "quotes": {
+      "Q1": "整点刷新对于“今日”这种带有实时监控性质的指标来说确实太慢了，体验上容易产生“数据没更新”的误解。",
+      "Q2": "如果是读缓存，目前缓存的 TTL 是多久？如果缓存是 5 分钟才更新一次，那前端改成 30 秒轮询也没意义，拿到的还是旧数据。",
+      "Q2b": "",
+      "Q3.P1": "",
+      "Q3.P2": "如果是直接查数据库的实时聚合，总览页通常是高并发访问的，30秒轮询一次可能会把 DB 打挂。",
+      "Q4": "如果后端目前有压力：我们可以折中一下，前端轮询改成 1 分钟，同时后端把这个指标的缓存 TTL 调整为 30 秒~1 分钟。这样既比整点快很多，又能保护数据库。",
+      "Q5": "改成 30 秒刷新一次在产品逻辑上没问题，但落地之前我们需要一起评估一下技术成本和后端压力，避免上线后引发线上问题。",
+      "Q7": "你看我们要不要先拉一下这个接口的监控数据（QPS 和 RT）确认下？如果压力不大，我就去改前端代码了。",
+      "Q8": "",
+      "Q9": "我建议我们换个思路，用更轻量的方案解决：方案 A（首选，Redis 实时计数）",
+      "Q10": "你看我们现在的架构里，这个指标的数据源是直接查库还是已经有 Redis 了？我们可以选一个最稳妥的方案推进。",
+      "Q11": ""
+    }
+  },
+  "score": {
+    "dims": {
+      "intent": 5.0,
+      "discover": 3.22,
+      "stance": 3.96,
+      "ownership": 3.96
+    },
+    "boundary_violated": false,
+    "stance_flipped": false,
+    "total": 3.99,
+    "planted_hits": {
+      "P1": false,
+      "P2": true
+    },
+    "evidence_attached": true
+  }
+}

@@ -1,0 +1,9 @@
+# CI 评委分配：跨厂商——GPT 系转录由 ci-judge（qwen）评，其余由 ci-judge-2（gpt）评。
+agg-gpt56: [ci-judge]
+agg-gpt55: [ci-judge]
+agg-luna: [ci-judge]
+agg-deepseek: [ci-judge-2]
+agg-glm: [ci-judge-2]
+agg-minimax: [ci-judge-2]
+agg-qwen: [ci-judge-2]
+_arbiter: []

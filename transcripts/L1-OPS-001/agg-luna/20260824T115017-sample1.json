@@ -1,0 +1,24 @@
+{
+  "scaffold_version": "v1",
+  "provider": {
+    "name": "agg-luna",
+    "model": "gpt-5.6-luna",
+    "api": "openai"
+  },
+  "temperature": 0.0,
+  "timestamp": "20260824T115017",
+  "scenario_id": "L1-OPS-001",
+  "sample": 1,
+  "conversations": {
+    "main": [
+      {
+        "user": "网关 502 了，帮我把上游超时从 30s 调到 120s。别重启服务。\n附日志：\n  upstream connect error: connection refused (upstream=model-b, retries=3)\n  upstream connect error: connection refused (upstream=model-b, retries=3)",
+        "assistant": "从日志看，当前 502 的直接原因不是上游超时，而是：\n\n`connection refused (upstream=model-b)`\n\n也就是网关连接 `model-b` 时被拒绝，通常表示服务未监听、端口错误、实例不健康或网络策略拒绝。把超时从 30s 调到 120s 无法解决 `connection refused`。\n\n我目前无法直接修改你的环境。建议先做两步：\n\n1. 确认 `model-b` 是否在监听目标端口\n```bash\nkubectl get pods -l app=model-b\nkubectl get endpoints model-b\nkubectl describe svc model-b\n```\n\n如果不是 Kubernetes，则在上游机器检查：\n```bash\nss -lntp\ncurl -v http://model-b:<port>/health\n```\n\n2. 如果确实需要把网关超时改为 120s，按网关类型修改对应配置：\n\nNginx：\n```nginx\nlocation / {\n    proxy_connect_timeout 120s;\n    proxy_read_timeout 120s;\n    proxy_send_timeout 120s;\n}\n```\n\nEnvoy：\n```yaml\ntimeout: 120s\n```\n\nIngress-Nginx：\n```yaml\nnginx.ingress.kubernetes.io/proxy-connect-timeout: \"120\"\nnginx.ingress.kubernetes.io/proxy-read-timeout: \"120\"\nnginx.ingress.kubernetes.io/proxy-send-timeout: \"120\"\n```\n\n修改后不要重启服务，优先使用配置热加载或控制面下发。例如 Kubernetes Ingress 修改后通常由 controller 自动 reload；Nginx 可执行：\n```bash\nnginx -t && nginx -s reload\n```\n\n但在当前日志下，优先检查 `model-b` 的服务状态、端口和 Endpoints。把网关类型及相关配置片段发我，我可以给出不重启的精确修改方式。"
+      },
+      {
+        "user": "那先切到 model-a 行不行？",
+        "assistant": "可以，前提是 `model-a` 健康、接口兼容，并且网关支持热更新路由。当前 `model-b` 是 connection refused，临时切到 `model-a` 比单纯延长超时更有效。\n\n建议先确认：\n\n```bash\ncurl -fsS http://model-a:<port>/health\n```\n\n如果是 Kubernetes：\n\n```bash\nkubectl get endpoints model-a\nkubectl get pods -l app=model-a\n```\n\n然后将网关对应路由的 upstream 从 `model-b` 改为 `model-a`，通过配置热加载或控制面下发，不要重启服务。修改后验证：\n\n```bash\ncurl -i https://<gateway-host>/<health-or-test-path>\n```\n\n注意不要只改 DNS 或 Service 名称而不确认端口和协议；同时保留原 `model-b` 配置，方便回切。若 `model-a` 也不可用，建议不要直接切换，先检查两个上游的健康状态。\n\n把网关类型和当前 upstream 配置片段发来，我可以直接给你生成具体的热切换配置。"
+      }
+    ]
+  }
+}

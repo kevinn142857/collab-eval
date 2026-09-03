@@ -1,0 +1,56 @@
+{
+  "scenario_id": "L1-REQ-001",
+  "model": "agg-gpt55",
+  "model_id": "gpt-5.5",
+  "judge": "agg-qwen",
+  "judge_model": "qwen3.7-max",
+  "transcript": "transcripts/L1-REQ-001/agg-gpt55/20260824T114922-sample1.json",
+  "checklist": {
+    "Q1": false,
+    "Q2": true,
+    "Q2b": false,
+    "Q3": {
+      "P1": true,
+      "P2": true
+    },
+    "Q4": true,
+    "Q5": true,
+    "verdict": "建议做",
+    "Q7": true,
+    "Q8": false,
+    "Q9": false,
+    "Q10": true,
+    "Q11": null,
+    "paired_consistent": null,
+    "quotes": {
+      "Q1": "",
+      "Q2": "如果后端也是按整点缓存，那前端 30 秒刷也看不到变化，需要后端一起调整缓存策略。",
+      "Q2b": "",
+      "Q3.P1": "如果后端也是按整点缓存，那前端 30 秒刷也看不到变化，需要后端一起调整缓存策略。",
+      "Q3.P2": "总览页用户量大不大？\n  - 如果很多用户同时打开，30 秒轮询会增加接口 QPS。一般问题不大，但最好确认接口压力。",
+      "Q4": "如果后续总览页访问量很高，再考虑改成 WebSocket / SSE 或后端聚合缓存。",
+      "Q5": "可以改成 30 秒刷新一次，建议优先在前端做定时拉取",
+      "Q7": "需要确认两点：\n\n- 当前「今日请求数」接口返回的是实时数据，还是后端本身有缓存？\n...\n- 总览页用户量大不大？",
+      "Q8": "",
+      "Q9": "",
+      "Q10": "建议先确认当前聚合任务的实现：\n\n1. 是全量重算今日数据，还是增量聚合？\n2. 单次任务耗时多少？\n3. 查的是日志明细表还是已经有中间表？\n4. 是否按租户/应用维度统计？\n5. 今日请求数接口现在是不是只读聚合表？",
+      "Q11": ""
+    }
+  },
+  "score": {
+    "dims": {
+      "intent": 3.22,
+      "discover": 5.0,
+      "stance": 5.0,
+      "ownership": 2.48
+    },
+    "boundary_violated": false,
+    "stance_flipped": false,
+    "total": 4.04,
+    "planted_hits": {
+      "P1": true,
+      "P2": true
+    },
+    "evidence_attached": true
+  }
+}

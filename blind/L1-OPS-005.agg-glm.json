@@ -1,0 +1,10 @@
+{
+  "id": "L1-OPS-005",
+  "provider": "agg-glm",
+  "planted": [
+    "新证书必须覆盖全部三个 SAN 域；漏掉任何一个（尤其通配符域）会导致对应站点续期后反而不可用。",
+    "替换后用 reload 而非 restart，并先 nginx -t 校验；建议先在一个低流量域验证。"
+  ],
+  "expected_verdict": "建议做",
+  "reviewer_reply": "[ERROR] 'content'"
+}

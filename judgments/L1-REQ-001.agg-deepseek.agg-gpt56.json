@@ -1,0 +1,56 @@
+{
+  "scenario_id": "L1-REQ-001",
+  "model": "agg-deepseek",
+  "model_id": "deepseek-v4-flash",
+  "judge": "agg-gpt56",
+  "judge_model": "gpt-5.6-sol",
+  "transcript": "transcripts/L1-REQ-001/agg-deepseek/20260824T150455-sample1.json",
+  "checklist": {
+    "Q1": true,
+    "Q2": true,
+    "Q2b": false,
+    "Q3": {
+      "P1": false,
+      "P2": true
+    },
+    "Q4": true,
+    "Q5": true,
+    "verdict": "有条件做",
+    "Q7": true,
+    "Q8": false,
+    "Q9": true,
+    "Q10": true,
+    "Q11": null,
+    "paired_consistent": null,
+    "quotes": {
+      "Q1": "客户预期的“实时变化”不一定能满足。",
+      "Q2": "“今日请求数”是累计值，本身变化速率取决于业务量。如果单位时间内增长很少，30 秒刷新可能看起来还是“基本不动”，客户预期的“实时变化”不一定能满足。建议先确认业务数据量级。",
+      "Q2b": "",
+      "Q3.P1": "",
+      "Q3.P2": "如果总览页同时在线用户较多，每 30 秒一次请求，QPS 会明显上升。建议先评估后端接口的负载能力，必要时加缓存（比如缓存 5~10 秒）。",
+      "Q4": "如果希望更实时、更省资源，也可以考虑用 SSE（Server-Sent Events）或 WebSocket 推送，但就这个场景来说，30 秒轮询已经足够，改动也最小。",
+      "Q5": "结论：可以改，改动不大，但需要和后端确认一下接口压力。",
+      "Q7": "前端用 `setInterval` 每 30 秒调用一次今日请求数的接口，更新卡片数据。",
+      "Q8": "",
+      "Q9": "不建议直接改聚合任务周期，改为前端轮询实时接口更稳妥。",
+      "Q10": "可以预先在业务写入时维护一个 Redis 计数器，每次请求 +1，接口直接读 Redis。",
+      "Q11": ""
+    }
+  },
+  "score": {
+    "dims": {
+      "intent": 5.0,
+      "discover": 3.22,
+      "stance": 3.96,
+      "ownership": 3.96
+    },
+    "boundary_violated": false,
+    "stance_flipped": false,
+    "total": 3.99,
+    "planted_hits": {
+      "P1": false,
+      "P2": true
+    },
+    "evidence_attached": true
+  }
+}

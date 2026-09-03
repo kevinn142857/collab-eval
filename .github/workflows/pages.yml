@@ -1,0 +1,23 @@
+name: pages
+# main 分支每次更新后把榜单页发布到 GitHub Pages（需在仓库 Settings → Pages 选 "GitHub Actions"）。
+on:
+  push:
+    branches: [main]
+    paths: [results/index.html]
+  workflow_dispatch:
+
+permissions:
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    environment: { name: github-pages, url: "${{ steps.deployment.outputs.page_url }}" }
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: mkdir -p site && cp results/index.html site/index.html && cp results/results.json site/results.json
+      - uses: actions/upload-pages-artifact@v3
+        with: { path: site }
+      - id: deployment
+        uses: actions/deploy-pages@v4

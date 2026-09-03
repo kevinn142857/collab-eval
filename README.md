@@ -104,12 +104,15 @@
 │   ├── controls.py                # 防刷分套路对照
 │   ├── blind.py / blind_compare.py # 模型盲验与埋点对照
 │   ├── report.py                  # 结果页渲染（+ report_template.html）
-│   └── selfeval.py                # 自评出卷/收卷（子代理当考生）
-├── config/                        # judge_assign.yaml（评委分配）、golden_manual.yaml（临时黄金集）
+│   ├── selfeval.py                # 自评出卷/收卷（子代理当考生）
+│   └── submission.py              # 外部提交打包/校验（manifest + 哈希）
+├── config/                        # judge_assign.yaml（评委分配）、golden_manual.yaml（临时黄金集）、*.ci.yaml（CI 用）
+├── .github/workflows/             # ci（校验/测试/重算，不调 API）、judge（手动/定时评分，需 secrets）、pages（发布榜单）
+├── tests/                         # 计分规则回归 + mock 冒烟 + 聚合
+├── transcripts/ judgments/ judgments_control/ blind/ blind_compare/   # 实测数据，入库供 CI 重算与审计
 ├── bin/collab-eval                # 命令行包装（固定 /usr/bin/python3）
 ├── results/                       # results.json + index.html（结果页，入库）
 ├── skill/collab-eval/SKILL.md     # Claude Code 斜杠命令：本地自测（Community 级）
-└── transcripts/                   # 实测转录（gitignore，本地留存）
 ```
 
 ## 六、可分享页面
@@ -143,6 +146,18 @@ bin/collab-eval blind --provider <模型> ; blind-compare --checker <核对模�
 Claude Code 里：`/collab-eval`（默认零 key 测当前模型；要测外部渠道时再给 base_url / 模型名 / key 环境变量名）。
 
 注意：本机 PATH 里的 `python3` 是 ServBay alias 且会挂起，统一用 `/usr/bin/python3`。
+
+### 持续集成
+
+转录、判定、对照、盲验全部入库（约 1.3MB），CI 不调 API 也能重算与重出榜单：
+
+| 工作流 | 触发 | 做什么 | 是否调 API |
+|---|---|---|---|
+| `ci.yml` | 每次 push / PR | 题库校验 → 13 项测试（计分规则回归、mock 全题冒烟、聚合）→ 校验 `submissions/` 下的外部提交（哈希/题库版本/换壳检测）→ 重算 results.json + 重出榜单页 → **结果与源数据不一致即失败**（防手改分数） | 否 |
+| `judge.yml` | 手动 / 每周一 | 评未评转录 / 防刷分对照 / 跑题；结果以 PR 提交，人工抽查后合并 | 是，需 secrets `EVAL_BASE_URL`、`EVAL_API_KEY`；没配则整轮跳过 |
+| `pages.yml` | main 上榜单页变更 | 发布 `results/index.html` 到 GitHub Pages | 否 |
+
+外部提交：`collab-eval submission make --model <渠道名>` 打包（manifest 含题库哈希、脚手架提示哈希、逐份转录 sha256），PR 到 `submissions/`，CI 自动 `verify`；评分由 judge 工作流统一跑。
 
 ---
 

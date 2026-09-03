@@ -12,6 +12,7 @@
   blind-compare   盲验与埋点对照           blind-compare --checker <name>
   report          结果页                   report <out.html>
   selfeval        自评出卷/收卷            selfeval sheet | assemble --answers <json>
+  submission      外部提交打包/校验        submission make --model <name> | verify <dir>
 
 本机 PATH 里的 python3 是 ServBay alias 且会挂起，请用：/usr/bin/python3 -m collab_eval.cli <子命令>
 """
@@ -30,6 +31,7 @@ COMMANDS = {
     "blind-compare": ("collab_eval.blind_compare", None),
     "report": ("collab_eval.report", None),
     "selfeval": ("collab_eval.selfeval", None),
+    "submission": ("collab_eval.submission", None),
 }
 
 

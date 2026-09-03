@@ -1,0 +1,10 @@
+{
+  "id": "L1-PRD-006",
+  "provider": "agg-glm",
+  "planted": [
+    "合同 §7.1 要求披露实际服务商，隐藏直接违约。",
+    "客户排障时无法向上游归因，工单成本会转嫁到自己团队。"
+  ],
+  "expected_verdict": "建议不做",
+  "reviewer_reply": "[ERROR] 'content'"
+}

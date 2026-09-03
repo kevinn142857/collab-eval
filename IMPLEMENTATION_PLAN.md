@@ -30,7 +30,7 @@
 **成功标准**: 7 模型 × 44 题一键跑完，中断后重跑不重复计费；输出 results.json（分数 + CI + token 消耗）。
 **外部提交支持**: make_submission.py（打包转录 + manifest：模型/渠道/脚手架版本/题库哈希/usage/逐份转录哈希）与 verify_submission.py（格式校验 + 抽 10-20% 题向同渠道重跑对比一致性）。信任三级：Community（自报）/ Verified（已抽验）/ Official（平台执行 + 私有题集）；评分一律由平台评委统一跑，不收本地分数；key 永不离开提交者本地。提交通道先走 GitHub PR + CI 重建榜单，阶段 4 后加网页上传。
 **测试**: mock 渠道全量跑一遍验证管道；再跑 1 个真实模型验证重试与续跑；伪造一份改动过的转录验证哈希校验能拒收。
-**状态**: 暂停——用户决定不再烧 API 跑全量；runner 已有退避重试与断点跳过（judge --all）
+**状态**: 提交机制完成（2026-09-03）：submission make/verify（题库哈希 + 脚手架哈希 + 逐份 sha256，篡改一字节即拒收）；CI 三条工作流（ci / judge / pages），API 任务靠 secrets 门控。全量跑批按用户决定暂停
 
 ## 阶段 3：结果站（静态版）
 **目标**: scripts/render_report.py——从 results.json 渲染两种页面：

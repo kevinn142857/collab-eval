@@ -1,11 +1,8 @@
 providers.yaml
-transcripts/
 __pycache__/
-blind/
-judgments/
-judgments_control/
+.pytest_cache/
+judgments_v1_archive/
+transcripts/*/mock/
 results/*
 !results/index.html
 !results/results.json
-judgments_v1_archive/
-blind_compare/

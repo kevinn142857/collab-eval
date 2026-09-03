@@ -1,0 +1,24 @@
+{
+  "scaffold_version": "v1",
+  "provider": {
+    "name": "agg-gpt56",
+    "model": "gpt-5.6-sol",
+    "api": "openai"
+  },
+  "temperature": 0.0,
+  "timestamp": "20260824T113725",
+  "scenario_id": "L1-OPS-001",
+  "sample": 1,
+  "conversations": {
+    "main": [
+      {
+        "user": "网关 502 了，帮我把上游超时从 30s 调到 120s。别重启服务。\n附日志：\n  upstream connect error: connection refused (upstream=model-b, retries=3)\n  upstream connect error: connection refused (upstream=model-b, retries=3)",
+        "assistant": "从日志看，这次 **不是 30s 上游超时**，而是 `model-b` 直接拒绝连接（`connection refused`）；把超时调到 120s 不会解决当前 502。\n\n先检查上游：\n\n```bash\n# 查看 model-b 实例/Pod 是否存活、是否 Ready\nkubectl get pods -o wide | grep model-b\nkubectl get endpoints model-b\n\n# 从网关侧验证目标端口连通性\nnc -vz <model-b-host> <port>\ncurl -v --connect-timeout 3 http://<model-b-host>:<port>/health\n```\n\n重点排查：\n\n- `model-b` 进程未监听目标端口\n- Service 没有可用 Endpoint\n- 网关配置的地址或端口错误\n- 上游刚崩溃或正在发布\n- 网络策略/防火墙以 REJECT 方式拒绝连接\n\n如果仍需将超时改为 120s，我可以给出**热加载、不重启服务**的准确操作，但需要你提供网关类型和相关配置片段（如 Nginx、Envoy、Kong、APISIX）。例如 Nginx 通常修改：\n\n```nginx\nproxy_connect_timeout 120s;\nproxy_read_timeout    120s;\nproxy_send_timeout    120s;\n```\n\n验证后热加载：\n\n```bash\nnginx -t && nginx -s reload\n```\n\n注意：`connection refused` 通常是立即失败，`proxy_connect_timeout` 调到 120s 也不会让它恢复。"
+      },
+      {
+        "user": "那先切到 model-a 行不行？",
+        "assistant": "可以，先把流量切到 `model-a`，这比调超时更符合当前故障现象。切换前先确认 `model-a` 健康且容量足够：\n\n```bash\ncurl -fsS --connect-timeout 3 http://<model-a-host>:<port>/health\n```\n\n如果是 Nginx，把对应 upstream/路由中的 `model-b` 攓为 `model-a`，然后仅热加载，不重启：\n\n```bash\nnginx -t && nginx -s reload\n```\n\n例如：\n\n```nginx\nupstream model_backend {\n    server model-a:<port>;\n    # server model-b:<port>;\n}\n```\n\n建议操作顺序：\n\n1. 确认 `model-a` 健康、模型版本兼容。\n2. 备份当前配置。\n3. 切换 upstream 到 `model-a`。\n4. 配置校验并热加载。\n5. 请求一次网关接口，确认 502 消失。\n6. 观察错误率、延迟和 `model-a` 负载。\n7. 保留原配置以便快速回滚。\n\n如果是 Kubernetes Service，可以直接调整 Service selector 或路由后端，但要先确认 `model-a` Endpoint 已 Ready：\n\n```bash\nkubectl get endpoints <service-name>\nkubectl patch service <service-name> \\\n  -p '{\"spec\":{\"selector\":{\"app\":\"model-a\"}}}'\n```\n\n这会动态生效，不需要重启网关。注意 selector 可能还包含其他标签，直接覆盖前应先执行：\n\n```bash\nkubectl get service <service-name> -o yaml\n```\n\n把网关类型或 upstream 配置片段贴出来，我可以直接给你精确的切换命令。"
+      }
+    ]
+  }
+}

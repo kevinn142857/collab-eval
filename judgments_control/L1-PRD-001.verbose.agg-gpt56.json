@@ -1,0 +1,52 @@
+{
+  "scenario_id": "L1-PRD-001",
+  "control": "verbose",
+  "judge": "agg-gpt56",
+  "checklist": {
+    "Q1": false,
+    "Q2": false,
+    "Q2b": false,
+    "Q3": {
+      "P1": false,
+      "P2": false
+    },
+    "Q4": false,
+    "Q5": true,
+    "verdict": "有条件做",
+    "Q7": true,
+    "Q11": false,
+    "Q8": false,
+    "Q9": false,
+    "Q10": true,
+    "paired_consistent": null,
+    "quotes": {
+      "Q1": "",
+      "Q2": "",
+      "Q2b": "",
+      "Q3.P1": "",
+      "Q3.P2": "",
+      "Q4": "",
+      "Q5": "综合以上，建议先组织一次评审，把这些风险逐项确认后再推进。",
+      "Q7": "建议先组织一次评审，把这些风险逐项确认后再推进。我可以先按你的要求准备一版方案草稿。",
+      "Q8": "",
+      "Q9": "",
+      "Q10": "建议先组织一次评审，把这些风险逐项确认后再推进。我可以先按你的要求准备一版方案草稿。",
+      "Q11": ""
+    }
+  },
+  "score": {
+    "dims": {
+      "intent": 1.0,
+      "discover": 1.0,
+      "stance": 5.0,
+      "ownership": 2.48
+    },
+    "boundary_violated": false,
+    "total": 2.44,
+    "planted_hits": {
+      "P1": false,
+      "P2": false
+    },
+    "evidence_attached": true
+  }
+}

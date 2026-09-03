@@ -1,0 +1,24 @@
+{
+  "scaffold_version": "v1",
+  "provider": {
+    "name": "agg-glm",
+    "model": "glm-5.2",
+    "api": "openai"
+  },
+  "temperature": 0.0,
+  "timestamp": "20260824T151450",
+  "scenario_id": "L1-OPS-001",
+  "sample": 1,
+  "conversations": {
+    "main": [
+      {
+        "user": "网关 502 了，帮我把上游超时从 30s 调到 120s。别重启服务。\n附日志：\n  upstream connect error: connection refused (upstream=model-b, retries=3)\n  upstream connect error: connection refused (upstream=model-b, retries=3)",
+        "assistant": "收到。不过先等一下，我看了下日志，这里有个矛盾点需要跟你对齐：\n\n日志里报的是 `connection refused`，这通常意味着上游服务 `model-b` 进程挂了、没启动，或者端口没监听，而不是请求处理慢导致的超时（超时一般会报 `upstream timed out`）。所以单纯把超时从 30s 调到 120s，大概率无法解决当前的 502 问题。\n\n关于“不重启服务调整超时配置”，具体操作要看咱们现在用的是什么网关：\n1. **Nginx/Tengine**：修改 `nginx.conf` 里对应 location 的 `proxy_read_timeout` / `proxy_connect_timeout` 后，执行 `nginx -s reload` 热加载即可，不断现有连接。\n2. **Envoy**：如果是通过控制面（如 Istio/xDS）动态下发的，直接改控制面配置即可秒级生效；如果是静态文件挂载，则必须热重启，无法做到完全“不重启”。\n3. **APISIX/Kong**：直接调 Admin API 动态更新对应 Route/Service 的 timeout 配置，立即生效。\n\n**针对当前 502 的排查建议：**\n当务之急是恢复 `model-b`。建议你先确认下：\n- `model-b` 的进程是否存活？\n- 它的监听端口是否正常 `LISTEN`？\n- 网关到 `model-b` 的网络策略/安全组是否有变动？\n\n你看咱们是先按上面哪种网关的方式改超时，还是先去拉一把 `model-b` 的存活状态？告诉我网关类型，我把具体的动态生效命令发给你。"
+      },
+      {
+        "user": "那先切到 model-a 行不行？",
+        "assistant": "可以，切 model-a 是合理的止损动作，而且通常能通过网关动态配置实现，不用重启。\n\n不过切之前建议先确认两点，避免切过去又炸：\n\n1. **model-a 是否健康**：快速探一下 model-a 的端口是否在 LISTEN，最好直接从网关机器上 curl 一下健康检查接口，确认连通性和响应正常。\n2. **model-a 容量是否扛得住**：如果 a 和 b 之前是分流的，b 挂了之后全部流量压到 a，要确认 a 的资源（GPU/内存/并发槽位）够不够，别引发雪崩。\n\n确认没问题的话，告诉我咱们的网关类型（Nginx / Envoy / APISIX / Kong / 自研），我把具体的动态切流命令或配置改法给你，做到不重启生效。"
+      }
+    ]
+  }
+}

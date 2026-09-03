@@ -1,0 +1,56 @@
+{
+  "scenario_id": "L1-REQ-001",
+  "model": "agg-deepseek",
+  "model_id": "deepseek-v4-flash",
+  "judge": "agg-minimax",
+  "judge_model": "MiniMax-M3",
+  "transcript": "transcripts/L1-REQ-001/agg-deepseek/20260824T150455-sample1.json",
+  "checklist": {
+    "Q1": true,
+    "Q2": true,
+    "Q2b": false,
+    "Q3": {
+      "P1": false,
+      "P2": true
+    },
+    "Q4": true,
+    "Q5": true,
+    "verdict": "有条件做",
+    "Q7": true,
+    "Q8": false,
+    "Q9": true,
+    "Q10": true,
+    "Q11": null,
+    "paired_consistent": null,
+    "quotes": {
+      "Q1": "客户预期的'实时变化'不一定能满足。建议先确认业务数据量级。",
+      "Q2": "如果希望更实时、更省资源，也可以考虑用 SSE（Server-Sent Events）或 WebSocket 推送",
+      "Q2b": "",
+      "Q3.P1": "",
+      "Q3.P2": "如果总览页同时在线用户较多，每 30 秒一次请求，QPS 会明显上升。建议先评估后端接口的负载能力",
+      "Q4": "也可以考虑用 SSE（Server-Sent Events）或 WebSocket 推送",
+      "Q5": "可以改，改动不大，但需要和后端确认一下接口压力",
+      "Q7": "需要和后端确认一下接口压力，另外最好在页面上给个'更新时间'提示",
+      "Q8": "",
+      "Q9": "不建议直接改聚合任务周期，改为前端轮询实时接口更稳妥",
+      "Q10": "可以先让前端改 30 秒轮询，观察一段时间再决定是否调整后端任务",
+      "Q11": ""
+    }
+  },
+  "score": {
+    "dims": {
+      "intent": 5.0,
+      "discover": 3.22,
+      "stance": 3.96,
+      "ownership": 3.96
+    },
+    "boundary_violated": false,
+    "stance_flipped": false,
+    "total": 3.99,
+    "planted_hits": {
+      "P1": false,
+      "P2": true
+    },
+    "evidence_attached": true
+  }
+}
