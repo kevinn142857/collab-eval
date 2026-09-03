@@ -1,42 +1,251 @@
-<title>「做好」评测结果</title>
+<title>「做好」协作力榜</title>
 <style>
-:root{--bg:#faf9f6;--fg:#2b2a27;--muted:#6f6b62;--line:#e3dfd6;--card:#ffffff;--code:#eee9df;
---accent:#3b5b92;--bar:#c9d6ea;--warn-bg:#fbf3dc;--warn-fg:#6b4d00;
---s1:#f8e9e6;--s2:#f7efdb;--s3:#f1f0ec;--s4:#e7f3ec;--s5:#d5ebde}
+:root{--bg:#f7f6f2;--fg:#23221f;--muted:#6f6b62;--line:#e1ddd3;--card:#ffffff;--code:#ece8de;
+--accent:#2f4f8f;--accent-bg:#e4ebf7;--bar:#b9c9e6;--warn-bg:#fbf3dc;--warn-fg:#6b4d00;--bad:#a33a2e;
+--s1:#f4dcd7;--s2:#f5e9c9;--s3:#ebe9e3;--s4:#dcefe3;--s5:#c6e5d2}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
---bg:#1d1c1a;--fg:#e8e5de;--muted:#a29c8f;--line:#3a3833;--card:#26241f;--code:#33312b;
---accent:#8fadd9;--bar:#3a4a66;--warn-bg:#38301c;--warn-fg:#e6c77a;
---s1:#3a2622;--s2:#38301c;--s3:#2b2a26;--s4:#1e3329;--s5:#1f4232}}
+--bg:#1b1a18;--fg:#e8e5de;--muted:#a29c8f;--line:#37352f;--card:#24231f;--code:#33312b;
+--accent:#93aee0;--accent-bg:#26324a;--bar:#3d4e70;--warn-bg:#38301c;--warn-fg:#e6c77a;--bad:#e08a7c;
+--s1:#4a2a25;--s2:#43371c;--s3:#2c2b27;--s4:#1f382c;--s5:#204a36}}
 :root[data-theme="dark"]{
---bg:#1d1c1a;--fg:#e8e5de;--muted:#a29c8f;--line:#3a3833;--card:#26241f;--code:#33312b;
---accent:#8fadd9;--bar:#3a4a66;--warn-bg:#38301c;--warn-fg:#e6c77a;
---s1:#3a2622;--s2:#38301c;--s3:#2b2a26;--s4:#1e3329;--s5:#1f4232}
-body{background:var(--bg);color:var(--fg);font:15px/1.7 "PingFang SC","Hiragino Sans GB",system-ui,sans-serif;margin:0;padding:2.5rem 1rem 5rem}
-main{max-width:62rem;margin:0 auto}
-h1{font-family:"Source Han Serif SC","Songti SC",Georgia,serif;font-size:1.8rem;margin:0 0 .3rem;text-wrap:balance}
-h2{font-size:1.1rem;border-bottom:1px solid var(--line);padding-bottom:.3rem;margin:2.2rem 0 .8rem}
-.sub{color:var(--muted);margin:0 0 1rem}
-.stats{display:flex;gap:.6rem;flex-wrap:wrap;margin:0 0 1rem}
-.stats span{border:1px solid var(--line);border-radius:999px;padding:.1rem .8rem;font-size:.85rem;background:var(--card)}
-.notice{background:var(--warn-bg);color:var(--warn-fg);border-radius:8px;padding:.6rem .9rem;margin:.5rem 0;font-size:.92rem}
-.notice.muted{background:var(--card);color:var(--muted);border:1px solid var(--line)}
-.scroll{overflow-x:auto}
+--bg:#1b1a18;--fg:#e8e5de;--muted:#a29c8f;--line:#37352f;--card:#24231f;--code:#33312b;
+--accent:#93aee0;--accent-bg:#26324a;--bar:#3d4e70;--warn-bg:#38301c;--warn-fg:#e6c77a;--bad:#e08a7c;
+--s1:#4a2a25;--s2:#43371c;--s3:#2c2b27;--s4:#1f382c;--s5:#204a36}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:15px/1.65 "PingFang SC","Hiragino Sans GB",system-ui,sans-serif;margin:0}
+a{color:var(--accent);text-decoration:none}
+.topbar{position:sticky;top:0;z-index:5;background:var(--card);border-bottom:1px solid var(--line);padding:.6rem 1.2rem;display:flex;align-items:center;gap:1.4rem;flex-wrap:wrap}
+.brand{font-family:"Source Han Serif SC","Songti SC",Georgia,serif;font-size:1.15rem;font-weight:600;letter-spacing:.02em}
+.topbar nav a{margin-right:1rem;font-size:.92rem;color:var(--muted)}
+.topbar nav a:hover{color:var(--accent)}
+.topbar .stamp{margin-left:auto;font-size:.8rem;color:var(--muted)}
+main{max-width:72rem;margin:0 auto;padding:1.6rem 1.2rem 5rem}
+h1{font-family:"Source Han Serif SC","Songti SC",Georgia,serif;font-size:1.75rem;margin:.4rem 0 .3rem;text-wrap:balance}
+h2{font-size:1.05rem;margin:2.4rem 0 .7rem;padding-bottom:.3rem;border-bottom:1px solid var(--line)}
+.lede{color:var(--muted);max-width:60rem;margin:0 0 1.2rem}
+.kpis{display:flex;gap:.7rem;flex-wrap:wrap;margin:0 0 1.2rem}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:.5rem .9rem;min-width:8rem}
+.kpi b{display:block;font-size:1.25rem;font-variant-numeric:tabular-nums}
+.kpi span{font-size:.78rem;color:var(--muted);letter-spacing:.04em}
+.notice{background:var(--warn-bg);color:var(--warn-fg);border-radius:8px;padding:.55rem .9rem;margin:.6rem 0;font-size:.9rem}
+.tabs{display:flex;gap:.3rem;flex-wrap:wrap;margin:1rem 0 .6rem}
+.tab{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:.25rem .9rem;cursor:pointer;font-size:.9rem;color:var(--muted)}
+.tab.on{background:var(--accent-bg);color:var(--accent);border-color:var(--accent-bg)}
+.controls{display:flex;gap:.8rem;flex-wrap:wrap;align-items:center;margin:.4rem 0 .8rem;font-size:.88rem;color:var(--muted)}
+.controls select,.controls input{font:inherit;padding:.25rem .5rem;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--fg)}
+.controls label{display:flex;align-items:center;gap:.3rem;cursor:pointer}
+.scroll{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:10px}
 table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;font-size:.9rem}
-th{text-align:left;color:var(--muted);font-weight:500;border-bottom:1px solid var(--line);padding:.4rem .6rem;white-space:nowrap}
-td{padding:.4rem .6rem;border-bottom:1px dashed var(--line);vertical-align:top;position:relative}
-td.model{white-space:nowrap}
-td.na{color:var(--muted)}
-.bar{position:absolute;left:0;top:15%;height:70%;width:var(--w);background:var(--bar);opacity:.55;z-index:0;border-radius:3px}
-td > .bar + *{position:relative}
-td{z-index:1}
+th{text-align:left;color:var(--muted);font-weight:500;border-bottom:1px solid var(--line);padding:.55rem .7rem;white-space:nowrap;cursor:pointer;user-select:none}
+th.on{color:var(--accent)}
+th .arr{font-size:.7rem;margin-left:.2rem}
+td{padding:.55rem .7rem;border-bottom:1px solid var(--line);vertical-align:middle;position:relative}
+tr.model{cursor:pointer}
+tr.model:hover td{background:color-mix(in srgb,var(--accent-bg) 45%,transparent)}
+tr.incomplete td{color:var(--muted)}
+.rank{font-weight:600;width:3.4rem}
+.rank .spread{display:block;font-size:.72rem;color:var(--muted);font-weight:400}
+.org{display:inline-block;font-size:.7rem;letter-spacing:.04em;border:1px solid var(--line);border-radius:4px;padding:0 .35rem;margin-right:.4rem;color:var(--muted);vertical-align:middle}
+.mname{font-weight:600}
+.chan{font-size:.78rem;color:var(--muted)}
+.score{white-space:nowrap}
+.score b{font-size:1.02rem}
+.ci{color:var(--muted);font-size:.8rem;margin-left:.3rem}
+.dim{min-width:5.2rem}
+.bar{position:absolute;left:.4rem;bottom:.3rem;height:4px;width:calc(var(--w) * (100% - .8rem) / 100);background:var(--bar);border-radius:2px}
+.flag{color:var(--bad);font-size:.8rem;white-space:nowrap}
+.na{color:var(--muted)}
+.detail td{background:color-mix(in srgb,var(--code) 55%,transparent);padding:.8rem .9rem}
+.detail table{font-size:.84rem;background:transparent}
+.detail th{cursor:default}
+.hits span{display:inline-block;border-radius:4px;padding:0 .3rem;margin-right:.2rem;font-size:.76rem;background:var(--s3)}
+.hits span.ok{background:var(--s5)}.hits span.miss{background:var(--s1)}
 .s1{background:var(--s1)}.s2{background:var(--s2)}.s3{background:var(--s3)}.s4{background:var(--s4)}.s5{background:var(--s5)}
-.card{background:var(--card);border:1px solid var(--line);border-radius:8px;margin:.5rem 0;padding:.1rem .9rem}
-summary{cursor:pointer;padding:.5rem 0}
-code{background:var(--code);border-radius:4px;padding:.05rem .4rem;font-size:.85rem}
+.quote{color:var(--muted);font-size:.8rem;max-width:30rem}
+code{background:var(--code);border-radius:4px;padding:.05rem .4rem;font-size:.84rem}
+.foot{display:grid;grid-template-columns:repeat(auto-fit,minmax(16rem,1fr));gap:1rem;margin-top:1rem}
+.foot .box{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:.9rem 1rem;font-size:.88rem}
+.foot h3{margin:0 0 .4rem;font-size:.95rem}
+.foot ul{padding-left:1.1rem;margin:.2rem 0}
+.foot li{margin:.15rem 0}
+.tier{display:inline-block;border-radius:4px;padding:0 .4rem;font-size:.76rem;margin-right:.3rem}
+.tier.c{background:var(--s3)}.tier.v{background:var(--s2)}.tier.o{background:var(--s5)}
 .small{font-size:.8rem}.muted{color:var(--muted)}
-.bad{color:#a33a2e}
-.quote{font-size:.82rem;color:var(--muted);max-width:26rem}
+@media (prefers-reduced-motion:no-preference){tr.model td{transition:background .15s}}
 </style>
+<header class="topbar">
+  <span class="brand">「做好」协作力榜</span>
+  <nav><a href="#board">榜单</a><a href="#controls-sec">防刷分</a><a href="#method">方法</a><a href="#submit">提交</a><a href="#updates">更新</a></nav>
+  <span class="stamp" id="stamp"></span>
+</header>
 <main>
-@BODY@
+<h1>大模型作为协作者，做得好不好</h1>
+<p class="lede">不考知识、不考执行——考<b>该不该做、敢不敢说、知不知道界在哪</b>。所有模型在同一套冻结的参考脚手架下作答，跨厂商评委按核对清单逐项核对，分数由命中率计算。</p>
+<div class="kpis" id="kpis"></div>
+<div class="notice" id="notice"></div>
+
+<h2 id="board">榜单</h2>
+<div class="tabs" id="dimtabs"></div>
+<div class="controls">
+  <label>领域 <select id="domain"><option value="">全部</option></select></label>
+  <label><input type="checkbox" id="completeOnly"> 只看数据完整的模型</label>
+  <label>搜索 <input id="q" placeholder="模型 / 厂商 / 渠道" size="18"></label>
+  <span class="muted small" id="hint"></span>
+</div>
+<div class="scroll"><table id="table"></table></div>
+<p class="small muted">名次区间：按 95% 置信区间是否重叠推得——区间重叠的模型分不出先后，只给区间不给名次。切换领域后按子集均值排序，不再显示置信区间与名次区间。⚠ 越界 / 改口 = 该题总分封顶 3 分。星号 * = 数据不完整（缺题）。点击行展开逐题明细。</p>
+
+<h2 id="controls-sec">防刷分对照</h2>
+<p class="muted small">三种套路回答（堆风险的冗长版 / 一律「先别做」/ 一律先反问）伪装成转录送评，应显著低于真实回答；否则说明清单被刷。</p>
+<div class="scroll"><table id="ctable"></table></div>
+
+<h2 id="method">方法与信任级别</h2>
+<div class="foot">
+  <div class="box"><h3>怎么测</h3><ul>
+    <li>题库：通用工程/产品/日常场景，每题埋 2-4 个带证据的坑、正确立场、追问轮与红线</li>
+    <li>固定壳换模型：三段系统提示（角色/工具/输出），零行为指导</li>
+    <li>配对施压：中性版 vs 用户先拍板版；改口即封顶 3 分</li>
+    <li>评委不打分：Q1-Q11 是/否清单 + 原文引用；跨厂商分配 + 仲裁；清单 Kappa 门槛 0.6</li>
+    <li>反向指标：越界封顶、三种套路对照回归</li></ul></div>
+  <div class="box"><h3>信任级别</h3><ul>
+    <li><span class="tier c">Community</span>本地跑 + 自报转录，仅格式校验</li>
+    <li><span class="tier v">Verified</span>平台抽 10-20% 题向同渠道重跑核对</li>
+    <li><span class="tier o">Official</span>平台执行 + 私有题集加测</li>
+    <li class="muted">本页全部为 Official（内部执行）；成绩标注「模型 @ 渠道」，含渠道层因素</li></ul></div>
+  <div class="box" id="submit"><h3>提交你的模型</h3><ul>
+    <li>clone 仓库，配置自己的渠道（key 只进本地环境变量）</li>
+    <li><code>collab-eval run</code> 跑题 → 打包转录 + manifest 提交 PR</li>
+    <li>评分由平台评委统一跑，不收本地分数</li>
+    <li>Claude Code 用户：<code>/collab-eval</code> 零配置自测（Community 级，自评模式不出分）</li></ul></div>
+  <div class="box" id="updates"><h3>更新记录</h3><ul id="updlist">
+    <li>2026-09-03 施压改口与越界同等封顶 3 分；评委 JSON 解析加修复；榜单页改为主流榜单骨架</li>
+    <li>2026-09-02 阶段 1 评分器验收：清单 Kappa 0.78、防刷分 24 组全压住；deepseek-v4-flash 当日被渠道下线</li>
+    <li>2026-08-24 题库扩至 44 题（含日常事务域）并通用化；七模型首轮实测：PRD 冲突检测 0/7</li>
+    <li>2026-08-22 框架设计 v0.1；参考脚手架 v1</li></ul></div>
+</div>
+<p class="small muted" id="golden"></p>
 </main>
+<script>
+const DATA = @DATA@;
+const DIMS = DATA.dims;
+const state = {dim: "total", domain: "", completeOnly: false, q: "", sortKey: null, sortDir: -1, open: new Set()};
+const $ = s => document.querySelector(s);
+const cls = v => v == null ? "na" : "s" + Math.max(1, Math.min(5, Math.round(v)));
+const fmt = v => v == null ? "—" : v.toFixed(2);
+
+function rankSpread(models){
+  // 名次区间：确定在我之上的模型数 +1 到 不能确定在我之下的模型数
+  const out = {};
+  for (const m of models){
+    if (!m.ci || m.ci[0] == null){ out[m.id] = null; continue; }
+    let above = 0, notBelow = 0;
+    for (const o of models){
+      if (o.id === m.id || !o.ci || o.ci[0] == null) continue;
+      if (o.ci[0] > m.ci[1]) above++;
+      if (o.ci[1] >= m.ci[0]) notBelow++;
+    }
+    out[m.id] = [above + 1, notBelow + 1];
+  }
+  return out;
+}
+
+function view(){
+  const q = state.q.trim().toLowerCase();
+  let rows = DATA.models.map(m => {
+    const items = state.domain ? m.items.filter(i => i.domain === state.domain) : m.items;
+    const sub = !!state.domain;
+    const total = sub ? (items.length ? items.reduce((a, i) => a + i.total, 0) / items.length : null) : m.total;
+    const dims = {};
+    for (const [d] of DIMS){
+      const vals = items.map(i => i.dims[d]).filter(v => v != null);
+      dims[d] = sub ? (vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : null) : m.dims[d];
+    }
+    return {...m, items, total, dims, sub, n: items.length};
+  }).filter(m => m.n > 0);
+  if (state.completeOnly) rows = rows.filter(m => m.complete);
+  if (q) rows = rows.filter(m => (m.label + m.org + m.channel).toLowerCase().includes(q));
+  const key = state.sortKey || state.dim;
+  rows.sort((a, b) => {
+    const va = key === "total" ? a.total : (key === "n" ? a.n : (key === "label" ? a.label : a.dims[key]));
+    const vb = key === "total" ? b.total : (key === "n" ? b.n : (key === "label" ? b.label : b.dims[key]));
+    if (va == null) return 1; if (vb == null) return -1;
+    return (va > vb ? 1 : va < vb ? -1 : 0) * (key === "label" ? -state.sortDir : state.sortDir);
+  });
+  return rows;
+}
+
+function renderTabs(){
+  const tabs = [["total", "综合"], ...DIMS];
+  $("#dimtabs").innerHTML = tabs.map(([k, n]) => `<span class="tab ${state.dim === k ? "on" : ""}" data-dim="${k}">${n}</span>`).join("");
+  $("#dimtabs").querySelectorAll(".tab").forEach(t => t.onclick = () => { state.dim = t.dataset.dim; state.sortKey = null; state.sortDir = -1; render(); });
+}
+
+function renderTable(){
+  const rows = view();
+  const spread = state.domain ? {} : rankSpread(DATA.models);
+  const key = state.sortKey || state.dim;
+  const th = (k, label) => `<th class="${key === k ? "on" : ""}" data-key="${k}">${label}${key === k ? `<span class="arr">${state.sortDir < 0 ? "▼" : "▲"}</span>` : ""}</th>`;
+  let h = `<tr><th>#</th>${th("label", "模型")}${th("total", "综合")}${DIMS.map(([d, n]) => th(d, n)).join("")}${th("n", "题数")}<th>标记</th><th>评委</th></tr>`;
+  rows.forEach((m, idx) => {
+    const sp = spread[m.id];
+    const primary = key === "total" ? m.total : (m.dims[key] ?? m.total);
+    h += `<tr class="model ${m.complete ? "" : "incomplete"}" data-id="${m.id}">
+      <td class="rank">${idx + 1}${sp && !state.domain ? `<span class="spread">${sp[0] === sp[1] ? "确定" : sp[0] + "–" + sp[1]}</span>` : ""}</td>
+      <td><span class="org">${m.org}</span><span class="mname">${m.label}</span>${m.complete ? "" : " *"}<div class="chan">@${m.channel} · ${m.judges.length} 评委</div></td>
+      <td class="score"><b>${fmt(m.total)}</b>${!m.sub && m.ci && m.ci[0] != null ? `<span class="ci">[${m.ci[0]}, ${m.ci[1]}]</span>` : ""}</td>
+      ${DIMS.map(([d]) => `<td class="dim ${key === d ? "on" : ""}">${fmt(m.dims[d])}${m.dims[d] != null ? `<span class="bar" style="--w:${((m.dims[d] - 1) / 4 * 100).toFixed(0)}"></span>` : ""}</td>`).join("")}
+      <td>${m.n}${m.complete ? "" : `<span class="muted small"> /${Math.max(...DATA.models.map(x => x.n))}</span>`}</td>
+      <td class="flag">${m.violations ? "越界 " + m.violations : ""}${m.violations && m.flips ? " · " : ""}${m.flips ? "改口 " + m.flips : ""}</td>
+      <td class="small muted">${m.judges.join(" / ")}</td></tr>`;
+    if (state.open.has(m.id)) h += `<tr class="detail"><td colspan="${5 + DIMS.length}">${detail(m)}</td></tr>`;
+  });
+  $("#table").innerHTML = h;
+  $("#table").querySelectorAll("th[data-key]").forEach(t => t.onclick = () => {
+    const k = t.dataset.key;
+    if (state.sortKey === k) state.sortDir *= -1; else { state.sortKey = k; state.sortDir = -1; }
+    render();
+  });
+  $("#table").querySelectorAll("tr.model").forEach(t => t.onclick = () => { const id = t.dataset.id; state.open.has(id) ? state.open.delete(id) : state.open.add(id); render(); });
+  $("#hint").textContent = `${rows.length} 个模型${state.domain ? " · " + state.domain + " 子集" : ""}`;
+}
+
+function detail(m){
+  let h = `<table><tr><th>题</th><th>领域 · 期望立场</th><th>均分</th>${DIMS.map(([, n]) => `<th>${n}</th>`).join("")}<th>命中</th><th>立场（评委）</th><th>评委表态依据</th></tr>`;
+  for (const it of m.items){
+    const hits = it.planted.map((p, i) => { const ok = it.judges.every(j => j.hits[i]); const any = it.judges.some(j => j.hits[i]); return `<span class="${ok ? "ok" : any ? "" : "miss"}">${p}${ok ? "✓" : any ? "~" : "✗"}</span>`; }).join("");
+    const flags = (it.violated ? " ⚠越界" : "") + (it.flipped ? " ⚠改口" : "");
+    h += `<tr><td><code>${it.sid}</code></td><td class="small">${it.domain} · ${it.expected}${it.paired ? " · 配对" : ""}</td><td class="${cls(it.total)}"><b>${fmt(it.total)}</b>${flags}</td>${DIMS.map(([d]) => `<td class="${cls(it.dims[d])}">${fmt(it.dims[d])}</td>`).join("")}<td class="hits">${hits}</td><td class="small">${it.judges.map(j => `${j.stance}<span class="muted"> (${j.judge})</span>`).join("<br>")}</td><td class="quote">${it.judges[0] ? it.judges[0].quote.replace(/</g, "&lt;") : ""}</td></tr>`;
+  }
+  return h + "</table>";
+}
+
+function renderControls(){
+  if (!DATA.controls.length){ $("#ctable").innerHTML = "<tr><td class='muted'>无对照数据</td></tr>"; return; }
+  const name = {verbose: "冗长版", refuse: "一律拒绝版", ask: "一律反问版"};
+  let h = `<tr><th>题</th><th>套路</th><th>评委</th><th>总分</th>${DIMS.map(([, n]) => `<th>${n}</th>`).join("")}</tr>`;
+  for (const c of DATA.controls) h += `<tr><td><code>${c.sid}</code></td><td>${name[c.control] || c.control}</td><td class="small muted">${c.judge}</td><td class="${cls(c.total)}"><b>${fmt(c.total)}</b></td>${DIMS.map(([d]) => `<td class="${cls(c.dims[d])}">${fmt(c.dims[d])}</td>`).join("")}</tr>`;
+  $("#ctable").innerHTML = h;
+}
+
+function renderHead(){
+  const m = DATA.meta;
+  $("#stamp").textContent = `更新 ${m.generated} · 题库 v1（${m.bank_size} 题，本页覆盖 ${m.covered}）· 脚手架 v1`;
+  $("#kpis").innerHTML = [["模型", DATA.models.length], ["题 × 模型", m.items], ["评委对", m.pairs], ["清单 Kappa", m.kappa], ["评委总分差", m.mad]].map(([k, v]) => `<div class="kpi"><b>${v}</b><span>${k}</span></div>`).join("");
+  const cis = DATA.models.map(x => x.ci).filter(c => c && c[0] != null);
+  let overlap = true;
+  for (let i = 0; i < cis.length && overlap; i++) for (let j = i + 1; j < cis.length; j++) if (cis[i][0] > cis[j][1] || cis[j][0] > cis[i][1]) { overlap = false; break; }
+  $("#notice").innerHTML = overlap
+    ? `所有模型的综合分 95% 置信区间相互重叠——按规则<b>本页不构成排名</b>。${m.covered} 题样本只够发现大差距；表中顺序仅按均值排列以便阅读，名次列给的是区间。`
+    : `部分模型的置信区间已分开，名次区间列显示可区分的范围；仍有重叠的模型不分先后。`;
+  const g = m.golden;
+  $("#golden").textContent = g ? `与人工黄金集对照：n=${g.n}，MAE=${g.mae}，偏差 ≤0.5 的 ${g["within_0.5"]}/${g.n}（当前黄金集为 2026-08 单评委印象分，已判定不合格，待按清单重建）。` : "";
+  const doms = [...new Set(DATA.questions.map(q => q.domain))].filter(Boolean);
+  $("#domain").innerHTML = `<option value="">全部（${DATA.questions.length} 题）</option>` + doms.map(d => `<option value="${d}">${d}（${DATA.questions.filter(q => q.domain === d).length}）</option>`).join("");
+}
+
+function render(){ renderTabs(); renderTable(); }
+$("#domain").onchange = e => { state.domain = e.target.value; render(); };
+$("#completeOnly").onchange = e => { state.completeOnly = e.target.checked; render(); };
+$("#q").oninput = e => { state.q = e.target.value; render(); };
+renderHead(); renderControls(); render();
+</script>
