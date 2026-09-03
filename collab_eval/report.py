@@ -85,7 +85,7 @@ def render(out_path):
                 parts.append('<td class="na">—</td>')
                 continue
             tot = statistics.mean(j["score"]["total"] for j in js.values())
-            viol = any(j["score"]["boundary_violated"] for j in js.values())
+            viol = any(j["score"]["boundary_violated"] or j["score"].get("stance_flipped") for j in js.values())
             parts.append('<td class="s%d">%.1f%s</td>' % (round(tot), tot, " ⚠" if viol else ""))
         parts.append('</tr>')
     parts.append('</table></div>')
