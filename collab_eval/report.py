@@ -66,7 +66,7 @@ def render(out_path):
         ci = r["total_ci"]
         judges = sorted({j for (sid, mm), js in judgments.items() if mm == m for j in js})
         parts.append('<tr><td class="model">%s<br><span class="muted small">@%s</span></td><td>%d</td><td><b>%.2f</b> <span class="muted">[%s, %s]</span></td>' % (
-            esc(MODEL_LABEL.get(m, m)), esc(m.replace("crabone-", "crabone")), r["n_items"], r["total"], ci[0], ci[1]))
+            esc(MODEL_LABEL.get(m, m)), esc(m.split("-")[0]), r["n_items"], r["total"], ci[0], ci[1]))
         for d, _ in DIMS:
             parts.append(score_cell(r.get(d)))
         parts.append('<td>%s</td><td>%d</td></tr>' % ("⚠ %d" % r["violations"] if r["violations"] else "0", len(judges)))
