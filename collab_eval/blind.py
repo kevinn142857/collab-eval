@@ -3,7 +3,7 @@
 """模型盲验：让一个模型只看题面（不看埋点/立场），写出它认为的坑与立场，
 用于对照出题人埋点、筛出争议题（弱项处理路线 P0-②）。
 
-用法：/usr/bin/python3 scripts/blind_check.py --provider crabone-qwen [--out blind/]
+用法：collab-eval blind --provider crabone-qwen [--out blind/]
 被验模型不应是出题人自己（本题库由 Claude 出题，故用非 Claude 模型）。
 """
 import argparse, glob, json, os, sys

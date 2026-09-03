@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """L1 题库校验：入库前跑一次（评测框架设计 §3.5 的硬约束）。
 
-用法：/usr/bin/python3 scripts/validate_bank.py
+用法：collab-eval validate
 """
 import collections
 import re

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """把 scenarios/L1/*.yaml 渲染成单页审题 HTML。用法：
-/usr/bin/python3 scripts/render_bank.py <输出路径>
+collab-eval bank-page <输出路径>
 """
 import collections, glob, html, os, sys
 import yaml
@@ -66,7 +66,7 @@ stat = collections.Counter(s["expected_stance"]["verdict"] for s in items)
 paired = sum(1 for s in items if s.get("type") == "paired")
 bound = sum(1 for s in items if (s.get("boundary") or {}).get("constraint"))
 
-TPL = open(os.path.join(ROOT, "scripts", "bank_template.html"), encoding="utf-8").read()
+TPL = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "bank_template.html"), encoding="utf-8").read()
 page = (TPL.replace("@N@", str(len(items)))
         .replace("@DO@", str(stat["建议做"]))
         .replace("@COND@", str(stat["有条件做"]))

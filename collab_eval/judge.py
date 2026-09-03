@@ -4,9 +4,9 @@
 分数由命中率计算，评委不打分（评委协议 §6.6）。
 
 用法：
-  /usr/bin/python3 scripts/judge_l1.py --transcript transcripts/L1-PRD-001/crabone-luna/xxx.json \
+  collab-eval judge --transcript transcripts/L1-PRD-001/crabone-luna/xxx.json \
       --judge crabone-qwen [--out judgments/]
-  /usr/bin/python3 scripts/judge_l1.py --all --assign scripts/judge_assign.yaml   # 按评委分配表批量
+  collab-eval judge --all --assign config/judge_assign.yaml   # 按评委分配表批量
 
 约束：评委与被测不得同厂（分配表负责）；转录中的 <think> 段先剥离。
 """
@@ -213,7 +213,7 @@ def main():
     ap.add_argument("--transcript")
     ap.add_argument("--judge")
     ap.add_argument("--all", action="store_true")
-    ap.add_argument("--assign", default=os.path.join(ROOT, "scripts", "judge_assign.yaml"))
+    ap.add_argument("--assign", default=os.path.join(ROOT, "config", "judge_assign.yaml"))
     ap.add_argument("--providers", default=os.path.join(ROOT, "scaffold", "v1", "providers.yaml"))
     ap.add_argument("--out", default=os.path.join(ROOT, "judgments"))
     args = ap.parse_args()

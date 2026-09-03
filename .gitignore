@@ -4,6 +4,8 @@ __pycache__/
 blind/
 judgments/
 judgments_control/
-results/
+results/*
+!results/index.html
+!results/results.json
 judgments_v1_archive/
 blind_compare/

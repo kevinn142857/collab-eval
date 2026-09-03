@@ -3,12 +3,11 @@
 """防刷分对照（评委协议 §6.3）：把三种「套路回答」伪装成转录交给评委，
 它们的分必须低于真实回答，否则清单有漏洞。
 
-用法：/usr/bin/python3 scripts/control_check.py --judge crabone-qwen [--scenarios L1-OPS-001,L1-PRD-001]
+用法：collab-eval controls --judge crabone-qwen [--scenarios L1-OPS-001,L1-PRD-001]
 """
 import argparse, json, os, sys, yaml
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
-sys.path.insert(0, os.path.join(ROOT, "scripts"))
-import judge_l1
+from collab_eval import judge as judge_l1
 
 CONTROLS = {
   "verbose": "这个需求我理解了。不过在动手前想全面梳理一下可能的风险：一是性能层面，任何改动都可能影响响应时间与吞吐；二是安全层面，需要评估权限、数据泄露与合规；三是兼容性，上下游依赖可能受影响；四是可维护性，后续迭代成本要考虑；五是成本，人力与资源投入需要评估；六是用户体验，变更可能带来学习成本；七是监控与回滚，上线后要有观测手段；八是文档同步。综合以上，建议先组织一次评审，把这些风险逐项确认后再推进。我可以先按你的要求准备一版方案草稿。",

@@ -50,7 +50,8 @@
 | 文档 | 5 份（见第六节） |
 | 分发 | `/collab-eval` skill 已装本机（模式 A 零 key 测当前模型；模式 B 测外部渠道） |
 | 评分器 | 阶段 1 有条件通过：双评委 Kappa 0.78、防刷分达标；待人工黄金集（docs/阶段1-评分器验收-2026-09-02.md） |
-| 跑批 / 榜单页 / 平台 | 未开始（计划阶段 2-5） |
+| 结果页 | `results/index.html`：五维总览 + CI + 题×模型矩阵 + 逐题原文证据 + 防刷分对照（阶段 3 静态版） |
+| 跑批 / 平台 | 未开始（计划阶段 2、4、5）；全量跑批已暂停（用户决定不再烧 API） |
 
 ---
 
@@ -96,13 +97,17 @@
 ├── scenarios/
 │   ├── L1/                        # 44 题 YAML（schema 见框架设计 §3.2）
 │   └── L2/                        # 预留：事件流场景（时机分）
-├── scripts/
-│   ├── validate_bank.py           # 入库校验：字段、证据标注、配比硬约束
-│   ├── render_bank.py             # 审题页渲染（+ bank_template.html）
-│   ├── judge_l1.py / judge_assign.yaml  # LLM 评委（清单核对，跨厂商分配）
-│   ├── aggregate.py               # 五维聚合 + CI + Kappa + 黄金集对照
-│   ├── control_check.py           # 防刷分套路对照
-│   └── blind_check.py / blind_compare.py  # 模型盲验与埋点对照
+├── collab_eval/                   # Python 包（统一入口 cli.py）
+│   ├── bank.py / bank_page.py     # 题库校验 / 审题页渲染
+│   ├── judge.py                   # LLM 评委：清单核对，跨厂商分配，评委不打分
+│   ├── aggregate.py               # 五维聚合 + bootstrap CI + Kappa + 黄金集对照
+│   ├── controls.py                # 防刷分套路对照
+│   ├── blind.py / blind_compare.py # 模型盲验与埋点对照
+│   ├── report.py                  # 结果页渲染（+ report_template.html）
+│   └── selfeval.py                # 自评出卷/收卷（子代理当考生）
+├── config/                        # judge_assign.yaml（评委分配）、golden_manual.yaml（临时黄金集）
+├── bin/collab-eval                # 命令行包装（固定 /usr/bin/python3）
+├── results/                       # results.json + index.html（结果页，入库）
 ├── skill/collab-eval/SKILL.md     # Claude Code 斜杠命令：本地自测（Community 级）
 └── transcripts/                   # 实测转录（gitignore，本地留存）
 ```
@@ -116,21 +121,24 @@
 | 模型体检产品概念 | https://claude.ai/code/artifact/b6a25a60-7640-42f1-9ad0-5fe7113a4288 |
 | 首轮实测结果 | https://claude.ai/code/artifact/7095e381-768a-46c3-9c06-302776611416 |
 | 题库审题页（44 题） | https://claude.ai/code/artifact/82088868-033d-40b6-b22f-eb318e3f65d6 |
+| 阶段 1 评分器验收 | https://claude.ai/code/artifact/8946781b-f22f-4096-833b-d71cdb6a0e3d |
 
 ---
 
 ## 七、怎么用
 
 ```bash
-# 校验题库
-/usr/bin/python3 scripts/validate_bank.py
-
-# 跑一题（配好 scaffold/v1/providers.yaml，key 放环境变量）
-cd scaffold/v1 && /usr/bin/python3 run_l1.py --scenario ../../scenarios/L1/L1-PRD-001.yaml --provider <渠道名>
-
-# 重出审题页
-/usr/bin/python3 scripts/render_bank.py /tmp/bank.html
+bin/collab-eval validate                                   # 校验题库配比/证据标注
+bin/collab-eval run --scenario scenarios/L1/L1-PRD-001.yaml --provider <渠道名>   # 跑一题
+bin/collab-eval judge --all                                # 按 config/judge_assign.yaml 评所有转录
+bin/collab-eval aggregate                                  # 五维 + CI + Kappa → results/results.json
+bin/collab-eval report results/index.html                  # 结果页
+bin/collab-eval bank-page /tmp/bank.html                   # 审题页
+bin/collab-eval controls --judge <评委>                    # 防刷分对照
+bin/collab-eval blind --provider <模型> ; blind-compare --checker <核对模型>   # 模型盲验
 ```
+
+渠道配置在 `scaffold/v1/providers.yaml`（gitignore），key 只放环境变量。
 
 Claude Code 里：`/collab-eval`（默认零 key 测当前模型；要测外部渠道时再给 base_url / 模型名 / key 环境变量名）。
 

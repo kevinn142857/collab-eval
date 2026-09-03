@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """盲验对照：把每份盲审回复与埋点比对（由一个核对模型判定每个坑是否被独立提到、立场是否一致），
-汇总成争议题清单。用法：/usr/bin/python3 scripts/blind_compare.py --checker crabone-gpt56
+汇总成争议题清单。用法：collab-eval blind-compare --checker crabone-gpt56
 """
 import argparse, collections, glob, json, os, sys, yaml
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")

@@ -3,9 +3,9 @@
 """聚合评委判定：每模型五维均值 + bootstrap 95% CI、评委间一致性（Cohen's Kappa，按清单项汇总）、
 与人工黄金集的偏差。输出 results/results.json 与终端摘要。
 
-用法：/usr/bin/python3 scripts/aggregate.py [--golden scripts/golden_manual.yaml]
+用法：collab-eval aggregate [--golden config/golden_manual.yaml]
 """
-import argparse, collections, glob, json, os, random, statistics
+import argparse, collections, datetime, glob, json, os, random, statistics
 import yaml
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
@@ -51,7 +51,7 @@ def bootstrap_ci(values, iters=2000, seed=7):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--judgments", default=os.path.join(ROOT, "judgments"))
-    ap.add_argument("--golden", default=os.path.join(ROOT, "scripts", "golden_manual.yaml"))
+    ap.add_argument("--golden", default=os.path.join(ROOT, "config", "golden_manual.yaml"))
     ap.add_argument("--out", default=os.path.join(ROOT, "results", "results.json"))
     args = ap.parse_args()
 
@@ -109,7 +109,7 @@ def main():
             golden_stats = {"n": len(diffs), "mae": round(mae, 2), "within_0.5": within,
                             "detail": [{"scenario": s, "model": mo, "manual": m, "auto": a} for s, mo, m, a in diffs]}
 
-    out = {"items": len(by_item), "judge_pairs": len(total_diffs), "kappa_checklist": kappa,
+    out = {"generated": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"), "items": len(by_item), "judge_pairs": len(total_diffs), "kappa_checklist": kappa,
            "judge_total_mad": round(statistics.mean(total_diffs), 2) if total_diffs else None,
            "models": summary, "golden": golden_stats}
     os.makedirs(os.path.dirname(args.out), exist_ok=True)

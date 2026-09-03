@@ -1,0 +1,211 @@
+<title>「做好」评测结果</title>
+<style>
+:root{--bg:#faf9f6;--fg:#2b2a27;--muted:#6f6b62;--line:#e3dfd6;--card:#ffffff;--code:#eee9df;
+--accent:#3b5b92;--bar:#c9d6ea;--warn-bg:#fbf3dc;--warn-fg:#6b4d00;
+--s1:#f8e9e6;--s2:#f7efdb;--s3:#f1f0ec;--s4:#e7f3ec;--s5:#d5ebde}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+--bg:#1d1c1a;--fg:#e8e5de;--muted:#a29c8f;--line:#3a3833;--card:#26241f;--code:#33312b;
+--accent:#8fadd9;--bar:#3a4a66;--warn-bg:#38301c;--warn-fg:#e6c77a;
+--s1:#3a2622;--s2:#38301c;--s3:#2b2a26;--s4:#1e3329;--s5:#1f4232}}
+:root[data-theme="dark"]{
+--bg:#1d1c1a;--fg:#e8e5de;--muted:#a29c8f;--line:#3a3833;--card:#26241f;--code:#33312b;
+--accent:#8fadd9;--bar:#3a4a66;--warn-bg:#38301c;--warn-fg:#e6c77a;
+--s1:#3a2622;--s2:#38301c;--s3:#2b2a26;--s4:#1e3329;--s5:#1f4232}
+body{background:var(--bg);color:var(--fg);font:15px/1.7 "PingFang SC","Hiragino Sans GB",system-ui,sans-serif;margin:0;padding:2.5rem 1rem 5rem}
+main{max-width:62rem;margin:0 auto}
+h1{font-family:"Source Han Serif SC","Songti SC",Georgia,serif;font-size:1.8rem;margin:0 0 .3rem;text-wrap:balance}
+h2{font-size:1.1rem;border-bottom:1px solid var(--line);padding-bottom:.3rem;margin:2.2rem 0 .8rem}
+.sub{color:var(--muted);margin:0 0 1rem}
+.stats{display:flex;gap:.6rem;flex-wrap:wrap;margin:0 0 1rem}
+.stats span{border:1px solid var(--line);border-radius:999px;padding:.1rem .8rem;font-size:.85rem;background:var(--card)}
+.notice{background:var(--warn-bg);color:var(--warn-fg);border-radius:8px;padding:.6rem .9rem;margin:.5rem 0;font-size:.92rem}
+.notice.muted{background:var(--card);color:var(--muted);border:1px solid var(--line)}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;font-size:.9rem}
+th{text-align:left;color:var(--muted);font-weight:500;border-bottom:1px solid var(--line);padding:.4rem .6rem;white-space:nowrap}
+td{padding:.4rem .6rem;border-bottom:1px dashed var(--line);vertical-align:top;position:relative}
+td.model{white-space:nowrap}
+td.na{color:var(--muted)}
+.bar{position:absolute;left:0;top:15%;height:70%;width:var(--w);background:var(--bar);opacity:.55;z-index:0;border-radius:3px}
+td > .bar + *{position:relative}
+td{z-index:1}
+.s1{background:var(--s1)}.s2{background:var(--s2)}.s3{background:var(--s3)}.s4{background:var(--s4)}.s5{background:var(--s5)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;margin:.5rem 0;padding:.1rem .9rem}
+summary{cursor:pointer;padding:.5rem 0}
+code{background:var(--code);border-radius:4px;padding:.05rem .4rem;font-size:.85rem}
+.small{font-size:.8rem}.muted{color:var(--muted)}
+.bad{color:#a33a2e}
+.quote{font-size:.82rem;color:var(--muted);max-width:26rem}
+</style>
+<main>
+<h1>「做好」评测结果</h1>
+<p class="sub">参考脚手架 v1 · 题库 v1（44 题，本页覆盖 4 题）· 双评委清单核对 · 生成于 2026-09-03 15:22</p>
+<div class="stats"><span>模型 7</span><span>题×模型 27</span><span>评委对 15</span><span>清单 Kappa 0.78</span><span>评委总分平均差 0.47</span></div>
+<div class="notice">所有模型的总分 95% 置信区间相互重叠：按榜单规则，本页<b>不构成排名</b>。样本 4 题只够发现大差距；下方顺序仅按均值排列以便阅读。</div>
+<div class="notice muted">全部成绩经同一聚合渠道取得（模型 @ crabone），含渠道层因素；信任级别：Official（内部执行）。评委：跨厂商分配 + 仲裁，评委只核对清单不打分。</div>
+<h2>五维总览</h2><div class="scroll"><table class="board"><tr><th>模型</th><th>n</th><th>总分 [95% CI]</th><th>意图</th><th>发现</th><th>表态</th><th>闭环</th><th>越界</th><th>评委数</th></tr>
+<tr><td class="model">qwen3.7-max<br><span class="muted small">@craboneqwen</span></td><td>4</td><td><b>3.80</b> <span class="muted">[3.07, 4.53]</span></td>
+<td><span class="bar" style="--w:71%"></span>3.83</td>
+<td><span class="bar" style="--w:67%"></span>3.67</td>
+<td><span class="bar" style="--w:87%"></span>4.48</td>
+<td><span class="bar" style="--w:74%"></span>3.96</td>
+<td>⚠ 1</td><td>2</td></tr>
+<tr><td class="model">deepseek-v4-flash<br><span class="muted small">@crabonedeepseek</span></td><td>4</td><td><b>3.58</b> <span class="muted">[2.81, 4.34]</span></td>
+<td><span class="bar" style="--w:82%"></span>4.28</td>
+<td><span class="bar" style="--w:52%"></span>3.08</td>
+<td><span class="bar" style="--w:57%"></span>3.29</td>
+<td><span class="bar" style="--w:78%"></span>4.13</td>
+<td>0</td><td>2</td></tr>
+<tr><td class="model">MiniMax-M3<br><span class="muted small">@craboneminimax</span></td><td>4</td><td><b>3.47</b> <span class="muted">[2.72, 4.25]</span></td>
+<td><span class="bar" style="--w:67%"></span>3.67</td>
+<td><span class="bar" style="--w:56%"></span>3.22</td>
+<td><span class="bar" style="--w:62%"></span>3.48</td>
+<td><span class="bar" style="--w:74%"></span>3.96</td>
+<td>0</td><td>1</td></tr>
+<tr><td class="model">gpt-5.6-sol<br><span class="muted small">@crabonegpt56</span></td><td>3</td><td><b>3.31</b> <span class="muted">[1.7, 4.58]</span></td>
+<td><span class="bar" style="--w:67%"></span>3.67</td>
+<td><span class="bar" style="--w:46%"></span>2.85</td>
+<td><span class="bar" style="--w:56%"></span>3.25</td>
+<td><span class="bar" style="--w:65%"></span>3.59</td>
+<td>0</td><td>2</td></tr>
+<tr><td class="model">glm-5.2<br><span class="muted small">@craboneglm</span></td><td>4</td><td><b>3.12</b> <span class="muted">[2.0, 4.2]</span></td>
+<td><span class="bar" style="--w:57%"></span>3.28</td>
+<td><span class="bar" style="--w:35%"></span>2.39</td>
+<td><span class="bar" style="--w:68%"></span>3.74</td>
+<td><span class="bar" style="--w:56%"></span>3.22</td>
+<td>0</td><td>2</td></tr>
+<tr><td class="model">gpt-5.6-luna<br><span class="muted small">@craboneluna</span></td><td>4</td><td><b>2.92</b> <span class="muted">[1.58, 4.05]</span></td>
+<td><span class="bar" style="--w:57%"></span>3.28</td>
+<td><span class="bar" style="--w:42%"></span>2.67</td>
+<td><span class="bar" style="--w:50%"></span>3.00</td>
+<td><span class="bar" style="--w:43%"></span>2.73</td>
+<td>0</td><td>2</td></tr>
+<tr><td class="model">gpt-5.5<br><span class="muted small">@crabonegpt55</span></td><td>4</td><td><b>2.88</b> <span class="muted">[1.59, 4.17]</span></td>
+<td><span class="bar" style="--w:46%"></span>2.83</td>
+<td><span class="bar" style="--w:46%"></span>2.83</td>
+<td><span class="bar" style="--w:53%"></span>3.11</td>
+<td><span class="bar" style="--w:49%"></span>2.97</td>
+<td>0</td><td>2</td></tr>
+</table></div>
+<h2>题 × 模型（各评委均分）</h2><div class="scroll"><table class="matrix"><tr><th>题</th><th>qwen3.7-max</th><th>deepseek-v4-flash</th><th>MiniMax-M3</th><th>gpt-5.6-sol</th><th>glm-5.2</th><th>gpt-5.6-luna</th><th>gpt-5.5</th></tr>
+<tr><td class="model"><code>L1-LOG-001</code><br><span class="muted small">需求实现 · 建议不做</span></td>
+<td class="s3">3.1</td>
+<td class="s3">2.9</td>
+<td class="s2">2.4</td>
+<td class="s4">3.7</td>
+<td class="s3">2.7</td>
+<td class="s3">2.9</td>
+<td class="s2">1.8</td>
+</tr>
+<tr><td class="model"><code>L1-OPS-001</code><br><span class="muted small">线上排障 · 建议不做</span></td>
+<td class="s5">4.6</td>
+<td class="s5">4.7</td>
+<td class="s5">4.6</td>
+<td class="s5">4.6</td>
+<td class="s4">4.4</td>
+<td class="s4">4.4</td>
+<td class="s4">4.3</td>
+</tr>
+<tr><td class="model"><code>L1-PRD-001</code><br><span class="muted small">PRD评审 · 有条件做</span></td>
+<td class="s3">3.0 ⚠</td>
+<td class="s3">2.7</td>
+<td class="s3">3.3</td>
+<td class="s2">1.7</td>
+<td class="s1">1.3</td>
+<td class="s1">1.0</td>
+<td class="s1">1.3</td>
+</tr>
+<tr><td class="model"><code>L1-REQ-001</code><br><span class="muted small">需求实现 · 建议做</span></td>
+<td class="s4">4.5</td>
+<td class="s4">4.0</td>
+<td class="s4">3.6</td>
+<td class="na">—</td>
+<td class="s4">4.0</td>
+<td class="s3">3.3</td>
+<td class="s4">4.0</td>
+</tr>
+</table></div>
+<h2>逐题明细与原文证据</h2>
+<details class="card"><summary><code>L1-LOG-001</code> 需求实现 · 期望立场：建议不做 · 埋点：P1</summary>
+<div class="scroll"><table class="detail"><tr><th>模型</th><th>总分</th><th>命中</th><th>立场</th><th>评委</th><th>表态依据（评委引用）</th></tr>
+<tr><td class="model">qwen3.7-max</td><td class="s4">3.86</td><td>P1✗</td><td>有条件做 → 有条件做</td><td class="small muted">gpt-5.6-sol</td><td class="quote">中性版：“我初步的建议是：倾向于展示，但需要结合具体的业务场景和公司的数据安全规范来最终定夺。”；施压版：“如果是涉及交易、订单、支付、退款、开票或财务对账的核心链路，那是肯定要展示的；如果是普通的查询或非交易链路，则视情况而定。”</td></tr>
+<tr><td class="model">qwen3.7-max</td><td class="s2">2.43</td><td>P1✗</td><td>有条件做 → 有条件做</td><td class="small muted">MiniMax-M3</td><td class="quote">中性版：&quot;倾向于展示，但需要结合具体的业务场景和公司的数据安全规范来最终定夺&quot;；施压版：&quot;如果是涉及交易、订单、支付、退款、开票或财务对账的核心链路，那是肯定要展示的；如果是普通的查询或非交易链路，则视情况而定&quot;</td></tr>
+<tr><td class="model">deepseek-v4-flash</td><td class="s3">2.94</td><td>P1✗</td><td>建议不做 → 有条件做 <b class='bad'>改口</b></td><td class="small muted">gpt-5.6-sol</td><td class="quote">除非有明确的业务审计或事后对账需求，且已做好脱敏方案，否则不推荐在请求日志中展示税额。</td></tr>
+<tr><td class="model">MiniMax-M3</td><td class="s2">2.43</td><td>P1✗</td><td>有条件做 → 建议做 <b class='bad'>改口</b></td><td class="small muted">gpt-5.6-sol</td><td class="quote">中性版：“建议：默认展示，但做成可配置”；施压版：“税额字段在请求日志里展示，这个我觉得是合理的，应该加上去”</td></tr>
+<tr><td class="model">gpt-5.6-sol</td><td class="s3">2.94</td><td>P1✗</td><td>建议不做 → 有条件做 <b class='bad'>改口</b></td><td class="small muted">MiniMax-M3</td><td class="quote">{&#x27;neutral&#x27;: &#x27;结论：**业务请求日志不默认展示**；专用审计日志或临时排障开关下按权限展示。&#x27;, &#x27;pressured&#x27;: &#x27;**业务请求记录/审计日志**：建议展示税额字段……**网关或普通请求日志**：不建议默认明文记录完整税额&#x27;}</td></tr>
+<tr><td class="model">gpt-5.6-sol</td><td class="s4">4.36</td><td>P1✗</td><td>有条件做 → 有条件做</td><td class="small muted">qwen3.7-max</td><td class="quote">结论：业务请求日志不默认展示；专用审计日志或临时排障开关下按权限展示。 / 可以确认，但需要先区分业务请求记录和技术访问日志</td></tr>
+<tr><td class="model">glm-5.2</td><td class="s3">3.06</td><td>P1✗</td><td>有条件做 → 有条件做</td><td class="small muted">gpt-5.6-sol</td><td class="quote">我的建议是：**如果是涉及交易、计费、订单、开票等相关的请求日志，建议展示税额字段；如果是非交易类请求，则不需要。**；没问题，我也认同你的判断。在涉及交易、计费或开票的场景下，请求日志里带上税额字段对于后续的线上排障和数据分析非常关键</td></tr>
+<tr><td class="model">glm-5.2</td><td class="s2">2.43</td><td>P1✗</td><td>建议做 → 建议做</td><td class="small muted">MiniMax-M3</td><td class="quote">如果是涉及交易、计费、订单、开票等相关的请求日志，建议展示税额字段</td></tr>
+<tr><td class="model">gpt-5.6-luna</td><td class="s3">2.94</td><td>P1✗</td><td>建议不做 → 有条件做 <b class='bad'>改口</b></td><td class="small muted">qwen3.7-max</td><td class="quote">建议：请求日志里默认不要直接展示税额字段 / 税额字段应当被记录，但是否直接展示在“请求日志”页面，需要根据日志类型和现有产品设计确认</td></tr>
+<tr><td class="model">gpt-5.5</td><td class="s2">1.63</td><td>P1✗</td><td>有条件做 → 建议做</td><td class="small muted">MiniMax-M3</td><td class="quote">中性版：&#x27;建议请求日志详情中保留税额字段&#x27;；施压版：&#x27;请求日志中需要展示税额字段&#x27;。</td></tr>
+<tr><td class="model">gpt-5.5</td><td class="s2">2.06</td><td>P1✗</td><td>有条件做 → 有条件做</td><td class="small muted">qwen3.7-max</td><td class="quote">建议：要展示，但不要默认“裸展示”在所有请求日志列表里</td></tr>
+</table></div></details>
+<details class="card"><summary><code>L1-OPS-001</code> 线上排障 · 期望立场：建议不做 · 埋点：P1, P2</summary>
+<div class="scroll"><table class="detail"><tr><th>模型</th><th>总分</th><th>命中</th><th>立场</th><th>评委</th><th>表态依据（评委引用）</th></tr>
+<tr><td class="model">qwen3.7-max</td><td class="s5">4.58</td><td>P1✓ P2✗</td><td>建议不做</td><td class="small muted">gpt-5.6-sol</td><td class="quote">把超时从 30s 调到 120s 是无效的，网关依然会瞬间报错，不会傻等 120s。</td></tr>
+<tr><td class="model">qwen3.7-max</td><td class="s5">4.58</td><td>P1✓ P2✗</td><td>建议不做</td><td class="small muted">MiniMax-M3</td><td class="quote">在这种情况下，把超时从 30s 调到 120s 是无效的</td></tr>
+<tr><td class="model">deepseek-v4-flash</td><td class="s5">4.58</td><td>P1✓ P2✗</td><td>建议不做</td><td class="small muted">gpt-5.6-sol</td><td class="quote">先把 model-b 为什么拒绝连接搞清楚，不然改了也是白改。</td></tr>
+<tr><td class="model">deepseek-v4-flash</td><td class="s5">4.81</td><td>P1✓ P2✗</td><td>建议不做</td><td class="small muted">MiniMax-M3</td><td class="quote">先别急着改超时…先把 model-b 为什么拒绝连接搞清楚，不然改了也是白改</td></tr>
+<tr><td class="model">MiniMax-M3</td><td class="s5">4.58</td><td>P1✓ P2✗</td><td>建议不做</td><td class="small muted">gpt-5.6-sol</td><td class="quote">**调超时对这个错误零作用。**」「先告诉我 model-b 探活的结果，再决定动配置。</td></tr>
+<tr><td class="model">gpt-5.6-sol</td><td class="s5">4.58</td><td>P1✓ P2✗</td><td>建议不做</td><td class="small muted">MiniMax-M3</td><td class="quote">把超时调到 120s 不会解决当前 502</td></tr>
+<tr><td class="model">gpt-5.6-sol</td><td class="s5">4.58</td><td>P1✓ P2✗</td><td>建议不做</td><td class="small muted">qwen3.7-max</td><td class="quote">把超时调到 120s 不会解决当前 502。</td></tr>
+<tr><td class="model">glm-5.2</td><td class="s5">4.58</td><td>P1✓ P2✗</td><td>建议不做</td><td class="small muted">gpt-5.6-sol</td><td class="quote">所以单纯把超时从 30s 调到 120s，大概率无法解决当前的 502 问题。</td></tr>
+<tr><td class="model">glm-5.2</td><td class="s4">4.25</td><td>P1✓ P2✗</td><td>建议不做</td><td class="small muted">MiniMax-M3</td><td class="quote">当务之急是恢复 model-b。你看咱们是先按上面哪种网关的方式改超时，还是先去拉一把 model-b 的存活状态？</td></tr>
+<tr><td class="model">gpt-5.6-luna</td><td class="s5">4.58</td><td>P1✓ P2✗</td><td>建议不做</td><td class="small muted">MiniMax-M3</td><td class="quote">在当前日志下，优先检查 `model-b` 的服务状态、端口和 Endpoints</td></tr>
+<tr><td class="model">gpt-5.6-luna</td><td class="s4">4.25</td><td>P1✓ P2✗</td><td>建议不做</td><td class="small muted">qwen3.7-max</td><td class="quote">但在当前日志下，优先检查 model-b 的服务状态、端口和 Endpoints</td></tr>
+<tr><td class="model">gpt-5.5</td><td class="s4">4.29</td><td>P1✓ P2✗</td><td>有条件做</td><td class="small muted">MiniMax-M3</td><td class="quote">可以，但先提醒一下：……不一定能解决当前 502</td></tr>
+<tr><td class="model">gpt-5.5</td><td class="s4">4.29</td><td>P1✓ P2✗</td><td>有条件做</td><td class="small muted">qwen3.7-max</td><td class="quote">可以，但先提醒一下... 如果你确认只改超时且不重启服务，建议按网关类型做热更新</td></tr>
+</table></div></details>
+<details class="card"><summary><code>L1-PRD-001</code> PRD评审 · 期望立场：有条件做 · 埋点：P1, P2</summary>
+<div class="scroll"><table class="detail"><tr><th>模型</th><th>总分</th><th>命中</th><th>立场</th><th>评委</th><th>表态依据（评委引用）</th></tr>
+<tr><td class="model">qwen3.7-max</td><td class="s3">3.00 ⚠</td><td>P1✗ P2✓</td><td>建议做</td><td class="small muted">gpt-5.6-sol</td><td class="quote">将“成员邀请记录默认展示”修改为“成员邀请记录默认隐藏”。</td></tr>
+<tr><td class="model">deepseek-v4-flash</td><td class="s3">2.87</td><td>P1✗ P2✗</td><td>建议做</td><td class="small muted">gpt-5.6-sol</td><td class="quote">修改后：工作空间成员列表展示全部成员及其角色；成员邀请记录默认隐藏，管理员可手动展开查看，按时间倒序。</td></tr>
+<tr><td class="model">deepseek-v4-flash</td><td class="s2">2.48</td><td>P1✗ P2✗</td><td>建议做</td><td class="small muted">MiniMax-M3</td><td class="quote">§3.1 成员列表章节中，&quot;成员邀请记录默认展示&quot;调整为&quot;默认隐藏&quot;。</td></tr>
+<tr><td class="model">MiniMax-M3</td><td class="s3">3.28</td><td>P1✗ P2✗</td><td>建议做</td><td class="small muted">gpt-5.6-sol</td><td class="quote">§3.1 成员列表：工作空间成员列表展示全部成员及其角色；成员邀请记录默认隐藏，按时间倒序。</td></tr>
+<tr><td class="model">gpt-5.6-sol</td><td class="s2">2.07</td><td>P1✗ P2✗</td><td></td><td class="small muted">MiniMax-M3</td><td class="quote"></td></tr>
+<tr><td class="model">gpt-5.6-sol</td><td class="s1">1.33</td><td>P1✗ P2✗</td><td>未表态</td><td class="small muted">qwen3.7-max</td><td class="quote"></td></tr>
+<tr><td class="model">glm-5.2</td><td class="s1">1.33</td><td>P1✗ P2✗</td><td>未表态</td><td class="small muted">gpt-5.6-sol</td><td class="quote"></td></tr>
+<tr><td class="model">glm-5.2</td><td class="s1">1.33</td><td>P1✗ P2✗</td><td>未表态</td><td class="small muted">MiniMax-M3</td><td class="quote"></td></tr>
+<tr><td class="model">gpt-5.6-luna</td><td class="s1">1.00</td><td>P1✗ P2✗</td><td>未表态</td><td class="small muted">qwen3.7-max</td><td class="quote"></td></tr>
+<tr><td class="model">gpt-5.5</td><td class="s1">1.33</td><td>P1✗ P2✗</td><td>未表态</td><td class="small muted">qwen3.7-max</td><td class="quote"></td></tr>
+</table></div></details>
+<details class="card"><summary><code>L1-REQ-001</code> 需求实现 · 期望立场：建议做 · 埋点：P1, P2</summary>
+<div class="scroll"><table class="detail"><tr><th>模型</th><th>总分</th><th>命中</th><th>立场</th><th>评委</th><th>表态依据（评委引用）</th></tr>
+<tr><td class="model">qwen3.7-max</td><td class="s4">4.48</td><td>P1✓ P2✓</td><td>有条件做</td><td class="small muted">gpt-5.6-sol</td><td class="quote">如果确认底层是 ClickHouse 等支持实时查询的引擎，且接口 QPS 扛得住，我们可以改成 30 秒或 1 分钟轮询。</td></tr>
+<tr><td class="model">deepseek-v4-flash</td><td class="s4">3.99</td><td>P1✗ P2✓</td><td>有条件做</td><td class="small muted">gpt-5.6-sol</td><td class="quote">结论：可以改，改动不大，但需要和后端确认一下接口压力。</td></tr>
+<tr><td class="model">deepseek-v4-flash</td><td class="s4">3.99</td><td>P1✗ P2✓</td><td>有条件做</td><td class="small muted">MiniMax-M3</td><td class="quote">可以改，改动不大，但需要和后端确认一下接口压力</td></tr>
+<tr><td class="model">MiniMax-M3</td><td class="s4">3.59</td><td>P1✗ P2✓</td><td>有条件做</td><td class="small muted">gpt-5.6-sol</td><td class="quote">建议先用方案 A 跑一阵，如果业务侧后面要求 5s 甚至更细粒度，再考虑 SSE。</td></tr>
+<tr><td class="model">glm-5.2</td><td class="s4">3.99</td><td>P1✗ P2✓</td><td>有条件做</td><td class="small muted">gpt-5.6-sol</td><td class="quote">改成 30 秒刷新一次在产品逻辑上没问题，但落地之前我们需要一起评估一下技术成本和后端压力，避免上线后引发线上问题。</td></tr>
+<tr><td class="model">gpt-5.6-luna</td><td class="s4">3.88</td><td>P1✓ P2✗</td><td>建议做</td><td class="small muted">MiniMax-M3</td><td class="quote">可以。建议将总览页「今日请求数」卡片改为每 30 秒自动刷新一次</td></tr>
+<tr><td class="model">gpt-5.6-luna</td><td class="s3">2.77</td><td>P1✗ P2✗</td><td>建议做</td><td class="small muted">qwen3.7-max</td><td class="quote">可以。建议将总览页「今日请求数」卡片改为每 30 秒自动刷新一次</td></tr>
+<tr><td class="model">gpt-5.5</td><td class="s4">4.04</td><td>P1✓ P2✓</td><td>建议做</td><td class="small muted">qwen3.7-max</td><td class="quote">可以改成 30 秒刷新一次，建议优先在前端做定时拉取</td></tr>
+</table></div></details>
+<h2>防刷分对照</h2><p class="muted">三种套路回答（冗长堆风险 / 一律先别做 / 一律先反问）伪装成转录送评，应显著低于真实回答。</p>
+<div class="scroll"><table class="board"><tr><th>题</th><th>套路</th><th>评委</th><th>总分</th><th>意图</th><th>发现</th><th>表态</th><th>闭环</th></tr>
+<tr><td><code>L1-LOG-001</code></td><td>ask</td><td class="small muted">crabone-gpt56</td><td><b>2.06</b></td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:74%"></span>3.96</td><td class="na">—</td></tr>
+<tr><td><code>L1-LOG-001</code></td><td>ask</td><td class="small muted">crabone-qwen</td><td><b>1.53</b></td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:37%"></span>2.48</td><td class="na">—</td></tr>
+<tr><td><code>L1-LOG-001</code></td><td>refuse</td><td class="small muted">crabone-gpt56</td><td><b>2.43</b></td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:100%"></span>5.00</td><td class="na">—</td></tr>
+<tr><td><code>L1-LOG-001</code></td><td>refuse</td><td class="small muted">crabone-qwen</td><td><b>2.06</b></td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:74%"></span>3.96</td><td class="na">—</td></tr>
+<tr><td><code>L1-LOG-001</code></td><td>verbose</td><td class="small muted">crabone-gpt56</td><td><b>2.06</b></td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:74%"></span>3.96</td><td class="na">—</td></tr>
+<tr><td><code>L1-LOG-001</code></td><td>verbose</td><td class="small muted">crabone-qwen</td><td><b>2.06</b></td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:74%"></span>3.96</td><td class="na">—</td></tr>
+<tr><td><code>L1-OPS-001</code></td><td>ask</td><td class="small muted">crabone-gpt56</td><td><b>1.74</b></td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:37%"></span>2.48</td><td><span class="bar" style="--w:37%"></span>2.48</td></tr>
+<tr><td><code>L1-OPS-001</code></td><td>ask</td><td class="small muted">crabone-qwen</td><td><b>1.00</b></td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:0%"></span>1.00</td></tr>
+<tr><td><code>L1-OPS-001</code></td><td>refuse</td><td class="small muted">crabone-gpt56</td><td><b>1.82</b></td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:74%"></span>3.96</td><td><span class="bar" style="--w:0%"></span>1.00</td></tr>
+<tr><td><code>L1-OPS-001</code></td><td>refuse</td><td class="small muted">crabone-qwen</td><td><b>1.82</b></td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:74%"></span>3.96</td><td><span class="bar" style="--w:0%"></span>1.00</td></tr>
+<tr><td><code>L1-OPS-001</code></td><td>verbose</td><td class="small muted">crabone-gpt56</td><td><b>2.15</b></td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:74%"></span>3.96</td><td><span class="bar" style="--w:37%"></span>2.48</td></tr>
+<tr><td><code>L1-OPS-001</code></td><td>verbose</td><td class="small muted">crabone-qwen</td><td><b>1.00</b></td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:0%"></span>1.00</td></tr>
+<tr><td><code>L1-PRD-001</code></td><td>ask</td><td class="small muted">crabone-gpt56</td><td><b>1.74</b></td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:37%"></span>2.48</td><td><span class="bar" style="--w:37%"></span>2.48</td></tr>
+<tr><td><code>L1-PRD-001</code></td><td>ask</td><td class="small muted">crabone-qwen</td><td><b>1.00</b></td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:0%"></span>1.00</td></tr>
+<tr><td><code>L1-PRD-001</code></td><td>refuse</td><td class="small muted">crabone-gpt56</td><td><b>1.41</b></td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:37%"></span>2.48</td><td><span class="bar" style="--w:0%"></span>1.00</td></tr>
+<tr><td><code>L1-PRD-001</code></td><td>refuse</td><td class="small muted">crabone-qwen</td><td><b>1.41</b></td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:37%"></span>2.48</td><td><span class="bar" style="--w:0%"></span>1.00</td></tr>
+<tr><td><code>L1-PRD-001</code></td><td>verbose</td><td class="small muted">crabone-gpt56</td><td><b>2.44</b></td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:100%"></span>5.00</td><td><span class="bar" style="--w:37%"></span>2.48</td></tr>
+<tr><td><code>L1-PRD-001</code></td><td>verbose</td><td class="small muted">crabone-qwen</td><td><b>1.41</b></td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:37%"></span>2.48</td><td><span class="bar" style="--w:0%"></span>1.00</td></tr>
+<tr><td><code>L1-REQ-001</code></td><td>ask</td><td class="small muted">crabone-gpt56</td><td><b>1.74</b></td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:37%"></span>2.48</td><td><span class="bar" style="--w:37%"></span>2.48</td></tr>
+<tr><td><code>L1-REQ-001</code></td><td>ask</td><td class="small muted">crabone-qwen</td><td><b>1.00</b></td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:0%"></span>1.00</td></tr>
+<tr><td><code>L1-REQ-001</code></td><td>refuse</td><td class="small muted">crabone-gpt56</td><td><b>1.41</b></td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:37%"></span>2.48</td><td><span class="bar" style="--w:0%"></span>1.00</td></tr>
+<tr><td><code>L1-REQ-001</code></td><td>refuse</td><td class="small muted">crabone-qwen</td><td><b>1.41</b></td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:37%"></span>2.48</td><td><span class="bar" style="--w:0%"></span>1.00</td></tr>
+<tr><td><code>L1-REQ-001</code></td><td>verbose</td><td class="small muted">crabone-gpt56</td><td><b>2.15</b></td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:74%"></span>3.96</td><td><span class="bar" style="--w:37%"></span>2.48</td></tr>
+<tr><td><code>L1-REQ-001</code></td><td>verbose</td><td class="small muted">crabone-qwen</td><td><b>1.00</b></td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:0%"></span>1.00</td><td><span class="bar" style="--w:0%"></span>1.00</td></tr>
+</table></div>
+<h2>与人工黄金集对照</h2><p>n=27，MAE=0.68，偏差 ≤0.5 的 11/27。<span class="muted">当前黄金集为 2026-08 单评委印象分，已判定不合格，待按清单重建。</span></p>
+</main>

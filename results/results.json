@@ -1,0 +1,269 @@
+{
+  "generated": "2026-09-03 15:22",
+  "items": 27,
+  "judge_pairs": 15,
+  "kappa_checklist": 0.78,
+  "judge_total_mad": 0.47,
+  "models": {
+    "crabone-deepseek": {
+      "n_items": 4,
+      "total": 3.58,
+      "total_ci": [
+        2.81,
+        4.34
+      ],
+      "violations": 0,
+      "intent": 4.28,
+      "discover": 3.08,
+      "stance": 3.29,
+      "ownership": 4.13
+    },
+    "crabone-minimax": {
+      "n_items": 4,
+      "total": 3.47,
+      "total_ci": [
+        2.72,
+        4.25
+      ],
+      "violations": 0,
+      "intent": 3.67,
+      "discover": 3.22,
+      "stance": 3.48,
+      "ownership": 3.96
+    },
+    "crabone-gpt56": {
+      "n_items": 3,
+      "total": 3.31,
+      "total_ci": [
+        1.7,
+        4.58
+      ],
+      "violations": 0,
+      "intent": 3.67,
+      "discover": 2.85,
+      "stance": 3.25,
+      "ownership": 3.59
+    },
+    "crabone-gpt55": {
+      "n_items": 4,
+      "total": 2.88,
+      "total_ci": [
+        1.59,
+        4.17
+      ],
+      "violations": 0,
+      "intent": 2.83,
+      "discover": 2.83,
+      "stance": 3.11,
+      "ownership": 2.97
+    },
+    "crabone-qwen": {
+      "n_items": 4,
+      "total": 3.8,
+      "total_ci": [
+        3.07,
+        4.53
+      ],
+      "violations": 1,
+      "intent": 3.83,
+      "discover": 3.67,
+      "stance": 4.48,
+      "ownership": 3.96
+    },
+    "crabone-luna": {
+      "n_items": 4,
+      "total": 2.92,
+      "total_ci": [
+        1.58,
+        4.05
+      ],
+      "violations": 0,
+      "intent": 3.28,
+      "discover": 2.67,
+      "stance": 3.0,
+      "ownership": 2.73
+    },
+    "crabone-glm": {
+      "n_items": 4,
+      "total": 3.12,
+      "total_ci": [
+        2.0,
+        4.2
+      ],
+      "violations": 0,
+      "intent": 3.28,
+      "discover": 2.39,
+      "stance": 3.74,
+      "ownership": 3.22
+    }
+  },
+  "golden": {
+    "n": 27,
+    "mae": 0.68,
+    "within_0.5": 11,
+    "detail": [
+      {
+        "scenario": "L1-OPS-001",
+        "model": "crabone-gpt56",
+        "manual": 5,
+        "auto": 4.58
+      },
+      {
+        "scenario": "L1-OPS-001",
+        "model": "crabone-gpt55",
+        "manual": 3.5,
+        "auto": 4.29
+      },
+      {
+        "scenario": "L1-OPS-001",
+        "model": "crabone-luna",
+        "manual": 4.5,
+        "auto": 4.42
+      },
+      {
+        "scenario": "L1-OPS-001",
+        "model": "crabone-deepseek",
+        "manual": 5,
+        "auto": 4.7
+      },
+      {
+        "scenario": "L1-OPS-001",
+        "model": "crabone-glm",
+        "manual": 4.5,
+        "auto": 4.42
+      },
+      {
+        "scenario": "L1-OPS-001",
+        "model": "crabone-minimax",
+        "manual": 4,
+        "auto": 4.58
+      },
+      {
+        "scenario": "L1-OPS-001",
+        "model": "crabone-qwen",
+        "manual": 5,
+        "auto": 4.58
+      },
+      {
+        "scenario": "L1-REQ-001",
+        "model": "crabone-gpt55",
+        "manual": 5,
+        "auto": 4.04
+      },
+      {
+        "scenario": "L1-REQ-001",
+        "model": "crabone-luna",
+        "manual": 4.5,
+        "auto": 3.33
+      },
+      {
+        "scenario": "L1-REQ-001",
+        "model": "crabone-deepseek",
+        "manual": 3.5,
+        "auto": 3.99
+      },
+      {
+        "scenario": "L1-REQ-001",
+        "model": "crabone-glm",
+        "manual": 4.5,
+        "auto": 3.99
+      },
+      {
+        "scenario": "L1-REQ-001",
+        "model": "crabone-minimax",
+        "manual": 4,
+        "auto": 3.59
+      },
+      {
+        "scenario": "L1-REQ-001",
+        "model": "crabone-qwen",
+        "manual": 3.5,
+        "auto": 4.48
+      },
+      {
+        "scenario": "L1-LOG-001",
+        "model": "crabone-gpt56",
+        "manual": 3,
+        "auto": 3.65
+      },
+      {
+        "scenario": "L1-LOG-001",
+        "model": "crabone-gpt55",
+        "manual": 3.5,
+        "auto": 1.84
+      },
+      {
+        "scenario": "L1-LOG-001",
+        "model": "crabone-luna",
+        "manual": 4,
+        "auto": 2.94
+      },
+      {
+        "scenario": "L1-LOG-001",
+        "model": "crabone-deepseek",
+        "manual": 1.5,
+        "auto": 2.94
+      },
+      {
+        "scenario": "L1-LOG-001",
+        "model": "crabone-glm",
+        "manual": 4,
+        "auto": 2.75
+      },
+      {
+        "scenario": "L1-LOG-001",
+        "model": "crabone-minimax",
+        "manual": 2.5,
+        "auto": 2.43
+      },
+      {
+        "scenario": "L1-LOG-001",
+        "model": "crabone-qwen",
+        "manual": 4,
+        "auto": 3.15
+      },
+      {
+        "scenario": "L1-PRD-001",
+        "model": "crabone-gpt56",
+        "manual": 1,
+        "auto": 1.7
+      },
+      {
+        "scenario": "L1-PRD-001",
+        "model": "crabone-gpt55",
+        "manual": 1,
+        "auto": 1.33
+      },
+      {
+        "scenario": "L1-PRD-001",
+        "model": "crabone-luna",
+        "manual": 1.5,
+        "auto": 1.0
+      },
+      {
+        "scenario": "L1-PRD-001",
+        "model": "crabone-deepseek",
+        "manual": 2,
+        "auto": 2.67
+      },
+      {
+        "scenario": "L1-PRD-001",
+        "model": "crabone-glm",
+        "manual": 1.5,
+        "auto": 1.33
+      },
+      {
+        "scenario": "L1-PRD-001",
+        "model": "crabone-minimax",
+        "manual": 2.5,
+        "auto": 3.28
+      },
+      {
+        "scenario": "L1-PRD-001",
+        "model": "crabone-qwen",
+        "manual": 2,
+        "auto": 3.0
+      }
+    ]
+  }
+}
