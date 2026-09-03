@@ -1,10 +1,10 @@
 # 评委分配：主评委跨厂商；_arbiter 为第三评委，用于算一致性（Kappa）。
 # 规则：评委与被测不得同厂（脚本另有 judge == model 兜底跳过）。
-crabone-gpt56: [crabone-qwen]
-crabone-gpt55: [crabone-qwen]
-crabone-luna: [crabone-qwen]
-crabone-deepseek: [crabone-gpt56]
-crabone-glm: [crabone-gpt56]
-crabone-minimax: [crabone-gpt56]
-crabone-qwen: [crabone-gpt56]
-_arbiter: [crabone-minimax]   # glm 超时/空输出、deepseek 被渠道下线，换 MiniMax（思维链由评分器剥离）
+agg-gpt56: [agg-qwen]
+agg-gpt55: [agg-qwen]
+agg-luna: [agg-qwen]
+agg-deepseek: [agg-gpt56]
+agg-glm: [agg-gpt56]
+agg-minimax: [agg-gpt56]
+agg-qwen: [agg-gpt56]
+_arbiter: [agg-minimax]   # glm 超时/空输出、deepseek 被渠道下线，换 MiniMax（思维链由评分器剥离）

@@ -4,8 +4,8 @@
 分数由命中率计算，评委不打分（评委协议 §6.6）。
 
 用法：
-  collab-eval judge --transcript transcripts/L1-PRD-001/crabone-luna/xxx.json \
-      --judge crabone-qwen [--out judgments/]
+  collab-eval judge --transcript transcripts/L1-PRD-001/agg-luna/xxx.json \
+      --judge agg-qwen [--out judgments/]
   collab-eval judge --all --assign config/judge_assign.yaml   # 按评委分配表批量
 
 约束：评委与被测不得同厂（分配表负责）；转录中的 <think> 段先剥离。

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """盲验对照：把每份盲审回复与埋点比对（由一个核对模型判定每个坑是否被独立提到、立场是否一致），
-汇总成争议题清单。用法：collab-eval blind-compare --checker crabone-gpt56
+汇总成争议题清单。用法：collab-eval blind-compare --checker agg-gpt56
 """
 import argparse, collections, glob, json, os, sys, yaml
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
@@ -49,7 +49,7 @@ def main():
             if all(hs): both += 1
             elif any(hs): one += 1
             else: none += 1
-        vs = [revs.get(k, {}).get("verdict", "-") for k in ("crabone-qwen", "crabone-glm")]
+        vs = [revs.get(k, {}).get("verdict", "-") for k in ("agg-qwen", "agg-glm")]
         exp = next(iter(revs.values()))["expected"]
         agree = sum(1 for v in vs if v == exp)
         flag = "保留" if (none == 0 and agree >= 1) else ("争议" if (none > 0 and agree == 0) else "复核")

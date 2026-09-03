@@ -77,7 +77,7 @@ def build_data(results, judgments, controls, scenarios, labels):
                           "violated": any(x["violated"] for x in per_judge),
                           "judges": per_judge})
         models.append({"id": m, "label": labels.get(m, m), "org": org_of(labels.get(m, m)),
-                       "channel": m.split("-")[0], "n": r["n_items"], "complete": r["n_items"] == max_n,
+                       "channel": {"agg": "聚合渠道"}.get(m.split("-")[0], "第三方渠道"), "n": r["n_items"], "complete": r["n_items"] == max_n,
                        "total": r["total"], "ci": r["total_ci"], "dims": {d: r.get(d) for d, _ in DIMS},
                        "violations": r["violations"], "flips": r.get("flips", 0),
                        "judges": sorted({x["judge"] for it in items for x in it["judges"]}), "items": items})

@@ -3,7 +3,7 @@
 """防刷分对照（评委协议 §6.3）：把三种「套路回答」伪装成转录交给评委，
 它们的分必须低于真实回答，否则清单有漏洞。
 
-用法：collab-eval controls --judge crabone-qwen [--scenarios L1-OPS-001,L1-PRD-001]
+用法：collab-eval controls --judge agg-qwen [--scenarios L1-OPS-001,L1-PRD-001]
 """
 import argparse, json, os, sys, yaml
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")

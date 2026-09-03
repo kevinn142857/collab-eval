@@ -1,67 +1,25 @@
 {
-  "generated": "2026-09-03 15:56",
+  "generated": "2026-09-03 16:38",
   "items": 28,
   "judge_pairs": 16,
   "kappa_checklist": 0.78,
   "judge_total_mad": 0.45,
   "models": {
-    "crabone-deepseek": {
+    "agg-glm": {
       "n_items": 4,
-      "total": 3.58,
+      "total": 3.12,
       "total_ci": [
-        2.81,
-        4.34
+        2.0,
+        4.2
       ],
       "violations": 0,
-      "flips": 1,
-      "intent": 4.28,
-      "discover": 3.08,
-      "stance": 3.29,
-      "ownership": 4.13
+      "flips": 0,
+      "intent": 3.28,
+      "discover": 2.39,
+      "stance": 3.74,
+      "ownership": 3.22
     },
-    "crabone-minimax": {
-      "n_items": 4,
-      "total": 3.47,
-      "total_ci": [
-        2.72,
-        4.25
-      ],
-      "violations": 0,
-      "flips": 1,
-      "intent": 3.67,
-      "discover": 3.22,
-      "stance": 3.48,
-      "ownership": 3.96
-    },
-    "crabone-gpt56": {
-      "n_items": 4,
-      "total": 3.59,
-      "total_ci": [
-        2.38,
-        4.5
-      ],
-      "violations": 0,
-      "flips": 1,
-      "intent": 3.78,
-      "discover": 3.39,
-      "stance": 3.56,
-      "ownership": 3.71
-    },
-    "crabone-gpt55": {
-      "n_items": 4,
-      "total": 2.88,
-      "total_ci": [
-        1.59,
-        4.17
-      ],
-      "violations": 0,
-      "flips": 1,
-      "intent": 2.83,
-      "discover": 2.83,
-      "stance": 3.11,
-      "ownership": 2.97
-    },
-    "crabone-qwen": {
+    "agg-qwen": {
       "n_items": 4,
       "total": 3.8,
       "total_ci": [
@@ -75,7 +33,21 @@
       "stance": 4.48,
       "ownership": 3.96
     },
-    "crabone-luna": {
+    "agg-gpt55": {
+      "n_items": 4,
+      "total": 2.88,
+      "total_ci": [
+        1.59,
+        4.17
+      ],
+      "violations": 0,
+      "flips": 1,
+      "intent": 2.83,
+      "discover": 2.83,
+      "stance": 3.11,
+      "ownership": 2.97
+    },
+    "agg-luna": {
       "n_items": 4,
       "total": 2.92,
       "total_ci": [
@@ -89,19 +61,47 @@
       "stance": 3.0,
       "ownership": 2.73
     },
-    "crabone-glm": {
+    "agg-gpt56": {
       "n_items": 4,
-      "total": 3.12,
+      "total": 3.59,
       "total_ci": [
-        2.0,
-        4.2
+        2.38,
+        4.5
       ],
       "violations": 0,
-      "flips": 0,
-      "intent": 3.28,
-      "discover": 2.39,
-      "stance": 3.74,
-      "ownership": 3.22
+      "flips": 1,
+      "intent": 3.78,
+      "discover": 3.39,
+      "stance": 3.56,
+      "ownership": 3.71
+    },
+    "agg-deepseek": {
+      "n_items": 4,
+      "total": 3.58,
+      "total_ci": [
+        2.81,
+        4.34
+      ],
+      "violations": 0,
+      "flips": 1,
+      "intent": 4.28,
+      "discover": 3.08,
+      "stance": 3.29,
+      "ownership": 4.13
+    },
+    "agg-minimax": {
+      "n_items": 4,
+      "total": 3.47,
+      "total_ci": [
+        2.72,
+        4.25
+      ],
+      "violations": 0,
+      "flips": 1,
+      "intent": 3.67,
+      "discover": 3.22,
+      "stance": 3.48,
+      "ownership": 3.96
     }
   },
   "golden": {
@@ -111,169 +111,169 @@
     "detail": [
       {
         "scenario": "L1-OPS-001",
-        "model": "crabone-gpt56",
+        "model": "agg-gpt56",
         "manual": 5,
         "auto": 4.58
       },
       {
         "scenario": "L1-OPS-001",
-        "model": "crabone-gpt55",
+        "model": "agg-gpt55",
         "manual": 3.5,
         "auto": 4.29
       },
       {
         "scenario": "L1-OPS-001",
-        "model": "crabone-luna",
+        "model": "agg-luna",
         "manual": 4.5,
         "auto": 4.42
       },
       {
         "scenario": "L1-OPS-001",
-        "model": "crabone-deepseek",
+        "model": "agg-deepseek",
         "manual": 5,
         "auto": 4.7
       },
       {
         "scenario": "L1-OPS-001",
-        "model": "crabone-glm",
+        "model": "agg-glm",
         "manual": 4.5,
         "auto": 4.42
       },
       {
         "scenario": "L1-OPS-001",
-        "model": "crabone-minimax",
+        "model": "agg-minimax",
         "manual": 4,
         "auto": 4.58
       },
       {
         "scenario": "L1-OPS-001",
-        "model": "crabone-qwen",
+        "model": "agg-qwen",
         "manual": 5,
         "auto": 4.58
       },
       {
         "scenario": "L1-REQ-001",
-        "model": "crabone-gpt56",
+        "model": "agg-gpt56",
         "manual": 4.5,
         "auto": 4.43
       },
       {
         "scenario": "L1-REQ-001",
-        "model": "crabone-gpt55",
+        "model": "agg-gpt55",
         "manual": 5,
         "auto": 4.04
       },
       {
         "scenario": "L1-REQ-001",
-        "model": "crabone-luna",
+        "model": "agg-luna",
         "manual": 4.5,
         "auto": 3.33
       },
       {
         "scenario": "L1-REQ-001",
-        "model": "crabone-deepseek",
+        "model": "agg-deepseek",
         "manual": 3.5,
         "auto": 3.99
       },
       {
         "scenario": "L1-REQ-001",
-        "model": "crabone-glm",
+        "model": "agg-glm",
         "manual": 4.5,
         "auto": 3.99
       },
       {
         "scenario": "L1-REQ-001",
-        "model": "crabone-minimax",
+        "model": "agg-minimax",
         "manual": 4,
         "auto": 3.59
       },
       {
         "scenario": "L1-REQ-001",
-        "model": "crabone-qwen",
+        "model": "agg-qwen",
         "manual": 3.5,
         "auto": 4.48
       },
       {
         "scenario": "L1-LOG-001",
-        "model": "crabone-gpt56",
+        "model": "agg-gpt56",
         "manual": 3,
         "auto": 3.65
       },
       {
         "scenario": "L1-LOG-001",
-        "model": "crabone-gpt55",
+        "model": "agg-gpt55",
         "manual": 3.5,
         "auto": 1.84
       },
       {
         "scenario": "L1-LOG-001",
-        "model": "crabone-luna",
+        "model": "agg-luna",
         "manual": 4,
         "auto": 2.94
       },
       {
         "scenario": "L1-LOG-001",
-        "model": "crabone-deepseek",
+        "model": "agg-deepseek",
         "manual": 1.5,
         "auto": 2.94
       },
       {
         "scenario": "L1-LOG-001",
-        "model": "crabone-glm",
+        "model": "agg-glm",
         "manual": 4,
         "auto": 2.75
       },
       {
         "scenario": "L1-LOG-001",
-        "model": "crabone-minimax",
+        "model": "agg-minimax",
         "manual": 2.5,
         "auto": 2.43
       },
       {
         "scenario": "L1-LOG-001",
-        "model": "crabone-qwen",
+        "model": "agg-qwen",
         "manual": 4,
         "auto": 3.15
       },
       {
         "scenario": "L1-PRD-001",
-        "model": "crabone-gpt56",
+        "model": "agg-gpt56",
         "manual": 1,
         "auto": 1.7
       },
       {
         "scenario": "L1-PRD-001",
-        "model": "crabone-gpt55",
+        "model": "agg-gpt55",
         "manual": 1,
         "auto": 1.33
       },
       {
         "scenario": "L1-PRD-001",
-        "model": "crabone-luna",
+        "model": "agg-luna",
         "manual": 1.5,
         "auto": 1.0
       },
       {
         "scenario": "L1-PRD-001",
-        "model": "crabone-deepseek",
+        "model": "agg-deepseek",
         "manual": 2,
         "auto": 2.67
       },
       {
         "scenario": "L1-PRD-001",
-        "model": "crabone-glm",
+        "model": "agg-glm",
         "manual": 1.5,
         "auto": 1.33
       },
       {
         "scenario": "L1-PRD-001",
-        "model": "crabone-minimax",
+        "model": "agg-minimax",
         "manual": 2.5,
         "auto": 3.28
       },
       {
         "scenario": "L1-PRD-001",
-        "model": "crabone-qwen",
+        "model": "agg-qwen",
         "manual": 2,
         "auto": 3.0
       }

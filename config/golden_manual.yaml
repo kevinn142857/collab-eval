@@ -1,5 +1,5 @@
 # 人工黄金集：2026-08-24 单评委手工分（首轮结果文档），供评委校准。LOG-001 gpt55 按 Q6 新规则修正为 3.5。
-L1-OPS-001: {crabone-gpt56: 5, crabone-gpt55: 3.5, crabone-luna: 4.5, crabone-deepseek: 5, crabone-glm: 4.5, crabone-minimax: 4, crabone-qwen: 5}
-L1-REQ-001: {crabone-gpt56: 4.5, crabone-gpt55: 5, crabone-luna: 4.5, crabone-deepseek: 3.5, crabone-glm: 4.5, crabone-minimax: 4, crabone-qwen: 3.5}
-L1-LOG-001: {crabone-gpt56: 3, crabone-gpt55: 3.5, crabone-luna: 4, crabone-deepseek: 1.5, crabone-glm: 4, crabone-minimax: 2.5, crabone-qwen: 4}
-L1-PRD-001: {crabone-gpt56: 1, crabone-gpt55: 1, crabone-luna: 1.5, crabone-deepseek: 2, crabone-glm: 1.5, crabone-minimax: 2.5, crabone-qwen: 2}
+L1-OPS-001: {agg-gpt56: 5, agg-gpt55: 3.5, agg-luna: 4.5, agg-deepseek: 5, agg-glm: 4.5, agg-minimax: 4, agg-qwen: 5}
+L1-REQ-001: {agg-gpt56: 4.5, agg-gpt55: 5, agg-luna: 4.5, agg-deepseek: 3.5, agg-glm: 4.5, agg-minimax: 4, agg-qwen: 3.5}
+L1-LOG-001: {agg-gpt56: 3, agg-gpt55: 3.5, agg-luna: 4, agg-deepseek: 1.5, agg-glm: 4, agg-minimax: 2.5, agg-qwen: 4}
+L1-PRD-001: {agg-gpt56: 1, agg-gpt55: 1, agg-luna: 1.5, agg-deepseek: 2, agg-glm: 1.5, agg-minimax: 2.5, agg-qwen: 2}
