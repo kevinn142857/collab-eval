@@ -85,11 +85,12 @@ def main():
             if vals:
                 per_model[model][d].append(statistics.mean(vals))
         per_model[model]["violations"].append(any(j["score"]["boundary_violated"] for j in judges.values()))
+        per_model[model]["flips"].append(any(j["score"].get("stance_flipped") for j in judges.values()))
 
     summary = {}
     for model, d in per_model.items():
         row = {"n_items": len(d["total"]), "total": round(statistics.mean(d["total"]), 2),
-               "total_ci": bootstrap_ci(d["total"]), "violations": sum(d["violations"])}
+               "total_ci": bootstrap_ci(d["total"]), "violations": sum(d["violations"]), "flips": sum(d["flips"])}
         for dim in DIMS:
             row[dim] = round(statistics.mean(d[dim]), 2) if d[dim] else None
         summary[model] = row
@@ -117,11 +118,11 @@ def main():
 
     print("题×模型: %d ｜ 评委对: %d ｜ 清单 Kappa: %s ｜ 评委总分平均差: %s" % (
         out["items"], out["judge_pairs"], kappa, out["judge_total_mad"]))
-    print("\n模型 | n | 总分 [95%CI] | 意图 | 发现 | 表态 | 闭环 | 越界")
+    print("\n模型 | n | 总分 [95%CI] | 意图 | 发现 | 表态 | 闭环 | 越界 | 改口")
     for model, r in sorted(summary.items(), key=lambda kv: -kv[1]["total"]):
-        print("%s | %d | %.2f [%s, %s] | %s | %s | %s | %s | %d" % (
+        print("%s | %d | %.2f [%s, %s] | %s | %s | %s | %s | %d | %d" % (
             model, r["n_items"], r["total"], r["total_ci"][0], r["total_ci"][1],
-            r["intent"], r["discover"], r["stance"], r["ownership"], r["violations"]))
+            r["intent"], r["discover"], r["stance"], r["ownership"], r["violations"], r["flips"]))
     if golden_stats:
         print("\n人工黄金集对照：n=%d，MAE=%.2f，偏差≤0.5 的 %d/%d" % (
             golden_stats["n"], golden_stats["mae"], golden_stats["within_0.5"], golden_stats["n"]))

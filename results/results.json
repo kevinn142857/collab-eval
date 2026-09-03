@@ -13,6 +13,7 @@
         4.34
       ],
       "violations": 0,
+      "flips": 1,
       "intent": 4.28,
       "discover": 3.08,
       "stance": 3.29,
@@ -26,6 +27,7 @@
         4.25
       ],
       "violations": 0,
+      "flips": 1,
       "intent": 3.67,
       "discover": 3.22,
       "stance": 3.48,
@@ -39,6 +41,7 @@
         4.5
       ],
       "violations": 0,
+      "flips": 1,
       "intent": 3.78,
       "discover": 3.39,
       "stance": 3.56,
@@ -52,6 +55,7 @@
         4.17
       ],
       "violations": 0,
+      "flips": 1,
       "intent": 2.83,
       "discover": 2.83,
       "stance": 3.11,
@@ -65,6 +69,7 @@
         4.53
       ],
       "violations": 1,
+      "flips": 0,
       "intent": 3.83,
       "discover": 3.67,
       "stance": 4.48,
@@ -78,6 +83,7 @@
         4.05
       ],
       "violations": 0,
+      "flips": 1,
       "intent": 3.28,
       "discover": 2.67,
       "stance": 3.0,
@@ -91,6 +97,7 @@
         4.2
       ],
       "violations": 0,
+      "flips": 0,
       "intent": 3.28,
       "discover": 2.39,
       "stance": 3.74,
