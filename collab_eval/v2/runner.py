@@ -6,11 +6,13 @@ import datetime as dt
 import json
 import os
 import random
+import threading
 import time
 import urllib.error
 import urllib.parse
 import urllib.request
 from collections.abc import Callable, Iterator
+from concurrent.futures import ThreadPoolExecutor
 from contextlib import contextmanager
 from pathlib import Path
 
@@ -282,6 +284,7 @@ def call_model(config: Json, messages: list[Json]) -> Json:
         data=json.dumps(payload).encode(),
         headers={
             "Content-Type": "application/json",
+            "User-Agent": "collab-eval/2.0",
             "Authorization": "Bearer " + str(key),
         },
         method="POST",
@@ -328,6 +331,7 @@ def run(
     *,
     execute: bool = False,
     allow_draft: bool = False,
+    workers: int = 1,
     call: Call = call_model,
 ) -> Json:
     """Run pending trials once. Interrupted/error records need a new batch.
@@ -335,6 +339,7 @@ def run(
     A started-call marker is persisted before I/O, so a crash cannot silently
     consume an extra sample or evade the global call budget on resume.
     """
+    require(type(workers) is int and 1 <= workers <= 8, "workers must be 1..8")
     with exclusive_write(path):
         manifest, existing = load_run(path)
         live = manifest["config"]["api"] != "mock"
@@ -347,11 +352,13 @@ def run(
         )
         done = {t["trial_id"] for t in existing}
         calls = sum(t["calls_started"] for t in existing)
-        for spec in trial_specs(manifest):
-            if spec["trial_id"] in done:
-                continue
-            if calls >= manifest["max_calls"]:
-                break
+        budget_lock = threading.Lock()
+
+        def execute_trial(spec: Json) -> None:
+            nonlocal calls
+            with budget_lock:
+                if spec["trial_id"] in done or calls >= manifest["max_calls"]:
+                    return
             family = next(f for f in manifest["families"] if f["id"] == spec["family_id"])
             condition = next(c for c in family["conditions"] if c["id"] == spec["condition_id"])
             record: Json = {
@@ -364,13 +371,14 @@ def run(
             output = path / "trials" / (spec["trial_id"] + ".json")
             messages: list[Json] = []
             for user in [condition["prompt"], *condition.get("follow_ups", [])]:
-                if calls >= manifest["max_calls"]:
-                    record["status"] = "budget_exhausted"
-                    break
-                messages.append({"role": "user", "content": user})
-                calls += 1
-                record["calls_started"] += 1
-                write_json(output, seal(record))
+                with budget_lock:
+                    if calls >= manifest["max_calls"]:
+                        record["status"] = "budget_exhausted"
+                        break
+                    messages.append({"role": "user", "content": user})
+                    calls += 1
+                    record["calls_started"] += 1
+                    write_json(output, seal(record))
                 start = time.monotonic()
                 try:
                     response = call(manifest["config"], messages)
@@ -400,6 +408,9 @@ def run(
             else:
                 record["status"] = "complete"
             write_json(output, seal(record))
+
+        with ThreadPoolExecutor(max_workers=workers) as pool:
+            list(pool.map(execute_trial, trial_specs(manifest)))
         return {
             "run_id": manifest["run_id"],
             "calls_started": calls,

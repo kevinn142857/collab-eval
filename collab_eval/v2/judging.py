@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 from .analysis import summarize
@@ -41,9 +42,11 @@ def judge_run(
     *,
     max_calls: int,
     execute: bool = False,
+    workers: int = 1,
     call: Call = call_model,
 ) -> Json:
     """Judge complete traces only; cache keyed by all relevant snapshots."""
+    require(type(workers) is int and 1 <= workers <= 8, "workers must be 1..8")
     with exclusive_write(path):
         manifest, trials = load_run(path)
         validate_config(config)
@@ -67,34 +70,10 @@ def judge_run(
             elif model_identity(record["judge_config"]) == model_identity(config):
                 raise ValueError("same judge model/endpoint cannot count as two independent judges")
         calls = sum(1 for r in records if r["judge_hash"] == judge_hash)
-        for trial in trials:
-            if trial["status"] != "complete":
-                continue
-            condition = condition_for(manifest, trial)
-            identity = digest(
-                {
-                    "trial_hash": trial["record_hash"],
-                    "condition": condition,
-                    "judge_hash": judge_hash,
-                    "scorer_version": VERSION,
-                }
-            )
-            output = path / "judgments" / (identity + ".json")
-            if output.exists() or calls >= max_calls:
-                continue
-            record = {
-                "trial_id": trial["trial_id"],
-                "trial_hash": trial["record_hash"],
-                "judge_id": config["name"],
-                "judge_hash": judge_hash,
-                "judge_config": effective,
-                "scorer_version": VERSION,
-                "parse_status": "interrupted",
-                "raw": "",
-                "checks": [],
-            }
-            write_json(output, seal(record), exclusive=True)
-            calls += 1
+        jobs: list[tuple[Json, Path, Json, Json]] = []
+
+        def evaluate(job: tuple[Json, Path, Json, Json]) -> None:
+            record, output, condition, trial = job
             try:
                 response = call(
                     effective,
@@ -132,6 +111,38 @@ def judge_run(
             except (ValueError, KeyError, TypeError, AttributeError, OSError) as exc:
                 record.update(parse_status="invalid", checks=[], error=type(exc).__name__)
             write_json(output, seal(record))
+
+        for trial in trials:
+            if trial["status"] != "complete":
+                continue
+            condition = condition_for(manifest, trial)
+            identity = digest(
+                {
+                    "trial_hash": trial["record_hash"],
+                    "condition": condition,
+                    "judge_hash": judge_hash,
+                    "scorer_version": VERSION,
+                }
+            )
+            output = path / "judgments" / (identity + ".json")
+            if output.exists() or calls >= max_calls:
+                continue
+            record = {
+                "trial_id": trial["trial_id"],
+                "trial_hash": trial["record_hash"],
+                "judge_id": config["name"],
+                "judge_hash": judge_hash,
+                "judge_config": effective,
+                "scorer_version": VERSION,
+                "parse_status": "interrupted",
+                "raw": "",
+                "checks": [],
+            }
+            write_json(output, seal(record), exclusive=True)
+            calls += 1
+            jobs.append((record, output, condition, trial))
+        with ThreadPoolExecutor(max_workers=workers) as pool:
+            list(pool.map(evaluate, jobs))
         return {
             "judge_id": config["name"],
             "calls_started": calls,
