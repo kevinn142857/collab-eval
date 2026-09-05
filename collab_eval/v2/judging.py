@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
@@ -87,8 +88,14 @@ def judge_run(
                         }
                     ],
                 )
-                record.update(raw=response.get("text", ""), usage=response.get("usage", {}))
-                value = json.loads(record["raw"])
+                record.update(
+                    raw=response.get("text", ""),
+                    usage=response.get("usage", {}),
+                    finish_reason=response.get("finish_reason"),
+                )
+                raw = record["raw"].strip()
+                fenced = re.fullmatch(r"```(?:json)?\s*\n(.*)\n```", raw, flags=re.DOTALL)
+                value = json.loads(fenced.group(1) if fenced else raw)
                 checks = value.get("checks")
                 require(
                     response.get("finish_reason") == "stop" and isinstance(checks, list),

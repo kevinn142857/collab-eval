@@ -98,3 +98,30 @@ def test_report_preserves_sealed_raw_judgments(tmp_path):
         for judgment in row["judgments"]:
             verify_seal(judgment)
             assert "independent_id" not in judgment
+
+
+def test_complete_fenced_json_is_parsed_but_truncation_is_not(tmp_path):
+    import json
+
+    setup_run(tmp_path)
+    row = collect(tmp_path)["trials"][0]
+    checks = [
+        {
+            "criterion_id": c["id"],
+            "status": "pass" if c["applies"] else "not_applicable",
+            "reason": "evidence checked",
+            "citations": [{"turn": 1, "quote": row["trace"]["turns"][0]["assistant"]}]
+            if c["applies"]
+            else [],
+        }
+        for c in row["condition"]["criteria"]
+    ]
+    raw = "```json\n" + json.dumps({"checks": checks}) + "\n```"
+    c = config()
+    judge_run(tmp_path, c, max_calls=1, call=lambda c, m: {"text": raw, "finish_reason": "stop"})
+    c.update(name="truncated-judge", model="different-model")
+    judge_run(tmp_path, c, max_calls=1, call=lambda c, m: {"text": raw, "finish_reason": "length"})
+    judgments = collect(tmp_path)["trials"][0]["judgments"]
+    assert sorted(j["parse_status"] for j in judgments) == ["invalid", "valid"]
+    assert all(j["raw"] == raw for j in judgments)
+    assert {j["finish_reason"] for j in judgments} == {"stop", "length"}
