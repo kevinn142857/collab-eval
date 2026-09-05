@@ -220,7 +220,7 @@ def judge_one(transcript_path, judge_name, providers, out_dir):
     raw = run_l1.call_model(provider, JUDGE_SYSTEM, [{"role": "user", "content": prompt}],
                             {"temperature": 0.0, "max_tokens": 4000})
     j = parse_json(raw)
-    result = {"scenario_id": record["scenario_id"], "model": record["provider"]["name"],
+    result = {"usage": run_l1.LAST_USAGE, "scenario_id": record["scenario_id"], "model": record["provider"]["name"],
               "model_id": record["provider"].get("model"), "judge": judge_name,
               "judge_model": provider.get("model"), "transcript": os.path.relpath(transcript_path, ROOT),
               "checklist": j, "score": score(scn, j)}

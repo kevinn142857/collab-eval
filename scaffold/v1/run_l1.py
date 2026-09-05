@@ -25,6 +25,7 @@ import urllib.request
 import yaml
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+LAST_USAGE = None  # 最近一次调用的 usage（prompt_tokens/completion_tokens），供调用方记账
 
 
 def load_yaml(path):
@@ -70,8 +71,10 @@ def http_json(url, headers, payload, timeout=180):
 
 def call_model(provider, system_prompt, messages, l1cfg):
     """messages: [{role: user|assistant, content: str}, ...]，返回助手文本。"""
+    global LAST_USAGE
     api = provider.get("api", "openai")
     if api == "mock":
+        LAST_USAGE = {"prompt_tokens": 0, "completion_tokens": 0}
         last = messages[-1]["content"]
         return "[mock:%s] 收到第 %d 轮消息（前 40 字：%s）" % (
             provider.get("model", "echo"), len(messages), last[:40].replace("\n", " "))
@@ -84,6 +87,7 @@ def call_model(provider, system_prompt, messages, l1cfg):
         }
         headers = {"Authorization": "Bearer " + os.environ[provider["api_key_env"]]}
         data = http_json(provider["base_url"].rstrip("/") + "/chat/completions", headers, payload)
+        LAST_USAGE = data.get("usage")
         return data["choices"][0]["message"]["content"]
     if api == "anthropic":
         payload = {
@@ -98,6 +102,8 @@ def call_model(provider, system_prompt, messages, l1cfg):
             "anthropic-version": "2023-06-01",
         }
         data = http_json(provider["base_url"].rstrip("/") + "/v1/messages", headers, payload)
+        u = data.get("usage") or {}
+        LAST_USAGE = {"prompt_tokens": u.get("input_tokens"), "completion_tokens": u.get("output_tokens")}
         return "".join(b.get("text", "") for b in data["content"])
     raise ValueError("未知 api 类型: %s" % api)
 
@@ -111,7 +117,7 @@ def run_conversation(provider, system_prompt, first_prompt, follow_ups, l1cfg):
         messages.append({"role": "user", "content": user_text})
         reply = call_model(provider, system_prompt, messages, l1cfg)
         messages.append({"role": "assistant", "content": reply})
-        turns.append({"user": user_text, "assistant": reply})
+        turns.append({"user": user_text, "assistant": reply, "usage": LAST_USAGE})
     return turns
 
 
