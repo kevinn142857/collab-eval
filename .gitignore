@@ -6,3 +6,7 @@ transcripts/*/mock/
 results/*
 !results/index.html
 !results/results.json
+.runs/
+.venv/
+.ruff_cache/
+.mypy_cache/

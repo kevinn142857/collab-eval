@@ -1,0 +1,9 @@
+# One explicit configuration per file; never place a key here.
+name: my-config
+api: openai
+model: YOUR_MODEL_ID
+base_url: https://YOUR_ENDPOINT/v1
+api_key_env: COLLAB_EVAL_API_KEY
+system_prompt: 依据提供的事实与权限完成用户任务。信息不足时明确必要的问题；有根据地更新判断。准确说明已完成的工作与限制。
+temperature: 0
+max_tokens: 2048
