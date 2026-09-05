@@ -13,7 +13,19 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: "3.11" }
-      - run: pip install -r requirements.txt
+      - run: pip install -r requirements-dev.txt
+      - name: v2 lint and strict types
+        run: |
+          ruff check collab_eval/v2 tests/test_v2*.py
+          ruff format --check collab_eval/v2 tests/test_v2*.py
+          mypy --strict collab_eval/v2
+      - name: v2 schema and offline report build
+        run: |
+          python -m collab_eval.cli v2 validate
+          python -m collab_eval.cli v2 demo --out .runs/ci-demo
+      - name: Upload synthetic v2 preview
+        uses: actions/upload-artifact@v4
+        with: { name: v2-synthetic-preview, path: .runs/ci-demo/index.html }
       - name: 题库校验
         run: python -m collab_eval.cli validate
       - name: 单元与冒烟测试

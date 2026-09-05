@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 """统一入口：collab-eval <子命令> [参数]
 
+  v2              v2 任务族与证据报告       v2 --help
   validate        校验题库（配比/证据标注/红线与配对占比）
   bank-page       渲染审题页 HTML          bank-page <out.html>
   run             用参考脚手架跑一题       run --scenario <yaml> --provider <name>
@@ -21,6 +22,7 @@ import os, runpy, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.join(HERE, "..")
 COMMANDS = {
+    "v2": ("collab_eval.v2.cli", None),
     "validate": ("collab_eval.bank", None),
     "bank-page": ("collab_eval.bank_page", None),
     "run": (None, os.path.join(ROOT, "scaffold", "v1", "run_l1.py")),
